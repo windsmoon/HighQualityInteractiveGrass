@@ -60,3 +60,7 @@ crashlytics-build.properties
 
 HighQualityInteractiveGrass/Library/
 HighQualityInteractiveGrass/Temp/
+HighQualityInteractiveGrass/.idea/
+HighQualityInteractiveGrass/obj/
+HighQualityInteractiveGrass/Assets/Rider.meta
+HighQualityInteractiveGrass/Assets/Rider/
