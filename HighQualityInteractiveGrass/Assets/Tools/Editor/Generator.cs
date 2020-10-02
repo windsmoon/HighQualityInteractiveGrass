@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class GenerateGround
+public class Generator
 {
     #region methods
     [MenuItem("HighQualityInteravtiveGrass/GenerateGround")]
-    public static void Generate()
+    public static void GenerateGround()
     {
         Texture2D heightMap = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Tools/Textures/HeightMap.png");
         List<Vector3> vertList = new List<Vector3>();
