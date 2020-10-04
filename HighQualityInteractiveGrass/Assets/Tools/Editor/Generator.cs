@@ -51,7 +51,10 @@ public class Generator
         float lod0QuadHeight = grassHeight / lod0QuadCount;
         float lod1QuadHeight = grassHeight / lod1QuadCount;
         float lod2QuadHeight = grassHeight / lod2QuadCount;
-
+        float lod0UVHeight = 1f / lod0QuadCount;
+        float lod1UVHeight = 1f / lod1QuadCount;
+        float lod2UVHeight = 1f / lod2QuadCount;
+        
         Vector3 v0 = new Vector3(-grassWidth, 0f, 0f);
         Vector3 v1 = new Vector3(grassWidth, 0f, 0f);
         Vector3 v2 = new Vector3(-grassWidth, lod0QuadHeight, 0f);
@@ -68,6 +71,16 @@ public class Generator
         Mesh lod0 = new Mesh();
         lod0.vertices = new[] {v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11};
         lod0.triangles = new[] {3, 1, 0, 0, 2, 3, 5, 3, 2, 2, 4, 5, 7, 5, 4, 4, 6, 7, 9, 7, 6, 6, 8, 9, 11, 9, 8, 8, 10, 11};
+        lod0.uv = new[]
+        {
+            new Vector2(0, 0), new Vector2(1f, 0),
+            new Vector2(0, lod0UVHeight), new Vector2(1, lod0UVHeight),
+            new Vector2(0, lod0UVHeight * 2), new Vector2(1, lod0UVHeight * 2),
+            new Vector2(0, lod0UVHeight * 3), new Vector2(1, lod0UVHeight * 3),
+            new Vector2(0, lod0UVHeight * 4), new Vector2(1, lod0UVHeight * 4),
+            new Vector2(0, lod0UVHeight * 5), new Vector2(1, lod0UVHeight * 5),
+        };
+        
         AssetDatabase.CreateAsset(lod0, "Assets/Tools/Meshes/GrassLOD0.mesh");
 
         
@@ -83,6 +96,15 @@ public class Generator
         Mesh lod1 = new Mesh();
         lod1.vertices = new[] {v0, v1, v2, v3, v4, v5, v6, v7};
         lod1.triangles = new[] {3, 1, 0, 0, 2, 3, 5, 3, 2, 2, 4, 5, 7, 5, 4, 4, 6, 7};
+        
+        lod1.uv = new[]
+        {
+            new Vector2(0, 0), new Vector2(1f, 0),
+            new Vector2(0, lod1UVHeight), new Vector2(1, lod1UVHeight),
+            new Vector2(0, lod1UVHeight * 2), new Vector2(1, lod1UVHeight * 2),
+            new Vector2(0, lod1UVHeight * 3), new Vector2(1, lod1UVHeight * 3),
+        };
+        
         AssetDatabase.CreateAsset(lod1, "Assets/Tools/Meshes/GrassLOD1.mesh");
         
         v0 = new Vector3(-grassWidth, 0f, 0f);
@@ -93,6 +115,13 @@ public class Generator
         Mesh lod2 = new Mesh();
         lod2.vertices = new[] {v0, v1, v2, v3};
         lod2.triangles = new[] {3, 1, 0, 0, 2, 3};
+        
+        lod2.uv = new[]
+        {
+            new Vector2(0, 0), new Vector2(1f, 0),
+            new Vector2(0, lod2UVHeight), new Vector2(1, lod2UVHeight),
+        };
+        
         AssetDatabase.CreateAsset(lod2, "Assets/Tools/Meshes/GrassLOD2.mesh");
     }
     #endregion
