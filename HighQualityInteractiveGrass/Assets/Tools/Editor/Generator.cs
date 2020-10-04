@@ -68,7 +68,7 @@ public class Generator
         Mesh lod0 = new Mesh();
         lod0.vertices = new[] {v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11};
         lod0.triangles = new[] {3, 1, 0, 0, 2, 3, 5, 3, 2, 2, 4, 5, 7, 5, 4, 4, 6, 7, 9, 7, 6, 6, 8, 9, 11, 9, 8, 8, 10, 11};
-        AssetDatabase.CreateAsset(lod0, "Assets/Tools/Meshes/lod0.mesh");
+        AssetDatabase.CreateAsset(lod0, "Assets/Tools/Meshes/GrassLOD0.mesh");
 
         
         v0 = new Vector3(-grassWidth, 0f, 0f);
@@ -83,7 +83,7 @@ public class Generator
         Mesh lod1 = new Mesh();
         lod1.vertices = new[] {v0, v1, v2, v3, v4, v5, v6, v7};
         lod1.triangles = new[] {3, 1, 0, 0, 2, 3, 5, 3, 2, 2, 4, 5, 7, 5, 4, 4, 6, 7};
-        AssetDatabase.CreateAsset(lod1, "Assets/Tools/Meshes/lod1.mesh");
+        AssetDatabase.CreateAsset(lod1, "Assets/Tools/Meshes/GrassLOD1.mesh");
         
         v0 = new Vector3(-grassWidth, 0f, 0f);
         v1 = new Vector3(grassWidth, 0f, 0f);
@@ -93,7 +93,7 @@ public class Generator
         Mesh lod2 = new Mesh();
         lod2.vertices = new[] {v0, v1, v2, v3};
         lod2.triangles = new[] {3, 1, 0, 0, 2, 3};
-        AssetDatabase.CreateAsset(lod2, "Assets/Tools/Meshes/lod2.mesh");
+        AssetDatabase.CreateAsset(lod2, "Assets/Tools/Meshes/GrassLOD2.mesh");
     }
     #endregion
 }
