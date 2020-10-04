@@ -31,7 +31,7 @@ public class Generator
         Mesh mesh = new Mesh();
         mesh.vertices = vertList.ToArray();
         mesh.triangles = triangleList.ToArray();
-        AssetDatabase.CreateAsset(mesh, "Assets/Tools/Meshes/Mesh.mesh");
+        AssetDatabase.CreateAsset(mesh, "Assets/Tools/Meshes/GroundMesh.mesh");
     }
 
     [MenuItem("HighQualityInteravtiveGrass/Generate Grass Mesh")]
