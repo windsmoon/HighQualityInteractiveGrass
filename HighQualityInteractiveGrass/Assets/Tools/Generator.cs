@@ -11,6 +11,8 @@ public class Generator : MonoBehaviour
     [SerializeField]
     private Mesh groundMesh;
     [SerializeField]
+    private GameObject grassPrefab;
+    [SerializeField]
     private GameObject grassLOD0;
     [SerializeField]
     private GameObject grassLOD1;
@@ -40,11 +42,11 @@ public class Generator : MonoBehaviour
         GameObject grassGroup = new GameObject("Grass Group");
         float grassWidth = 0.05f;
 
-        for (int i = 0; i < 50; ++i)
+        for (int i = 0; i < 20; ++i)
         {
-            for (int j = 0; j < 50; ++j)
+            for (int j = 0; j < 20; ++j)
             {
-                GameObject lod0 = Instantiate<GameObject>(grassLOD0, new Vector3(i * 0.05, 0, j), Quaternion.identity, grassGroup.transform);
+                GameObject lod0 = Instantiate<GameObject>(grassPrefab, new Vector3(i * 0.1f - 0.05f, 0, j * 0.1f - 0.05f), Quaternion.identity, grassGroup.transform);
             }
         }
     }
