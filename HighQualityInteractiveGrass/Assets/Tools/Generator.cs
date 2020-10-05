@@ -115,6 +115,16 @@ public class Generator : MonoBehaviour
         
         Mesh lod0 = new Mesh();
         lod0.vertices = new[] {v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11};
+        lod0.colors = new[]
+        {
+            new Color(0, 0, 0), new Color(0, 0, 0),
+            new Color(0, lod0UVHeight, 0), new Color(0, lod0UVHeight, 0),
+            new Color(0, lod0UVHeight * 2, 0), new Color(0, lod0UVHeight * 2, 0),
+            new Color(0, lod0UVHeight * 3, 0), new Color(0, lod0UVHeight * 3, 0),
+            new Color(0, lod0UVHeight * 4, 0), new Color(0, lod0UVHeight * 4, 0),
+            new Color(0, 1, 0), new Color(0, 1, 0),
+        };
+        
         lod0.triangles = new[] {3, 1, 0, 0, 2, 3, 5, 3, 2, 2, 4, 5, 7, 5, 4, 4, 6, 7, 9, 7, 6, 6, 8, 9, 11, 9, 8, 8, 10, 11};
         lod0.uv = new[]
         {
@@ -123,7 +133,7 @@ public class Generator : MonoBehaviour
             new Vector2(0, lod0UVHeight * 2), new Vector2(1, lod0UVHeight * 2),
             new Vector2(0, lod0UVHeight * 3), new Vector2(1, lod0UVHeight * 3),
             new Vector2(0, lod0UVHeight * 4), new Vector2(1, lod0UVHeight * 4),
-            new Vector2(0, lod0UVHeight * 5), new Vector2(1, lod0UVHeight * 5),
+            new Vector2(0, 1), new Vector2(1, 1),
         };
         
         AssetDatabase.CreateAsset(lod0, "Assets/Tools/Meshes/GrassLOD0.mesh");
@@ -147,7 +157,7 @@ public class Generator : MonoBehaviour
             new Vector2(0, 0), new Vector2(1f, 0),
             new Vector2(0, lod1UVHeight), new Vector2(1, lod1UVHeight),
             new Vector2(0, lod1UVHeight * 2), new Vector2(1, lod1UVHeight * 2),
-            new Vector2(0, lod1UVHeight * 3), new Vector2(1, lod1UVHeight * 3),
+            new Vector2(0, 1), new Vector2(1, 1),
         };
         
         AssetDatabase.CreateAsset(lod1, "Assets/Tools/Meshes/GrassLOD1.mesh");
@@ -164,7 +174,7 @@ public class Generator : MonoBehaviour
         lod2.uv = new[]
         {
             new Vector2(0, 0), new Vector2(1f, 0),
-            new Vector2(0, lod2UVHeight), new Vector2(1, lod2UVHeight),
+            new Vector2(0, 1), new Vector2(1, 1),
         };
         
         AssetDatabase.CreateAsset(lod2, "Assets/Tools/Meshes/GrassLOD2.mesh");
