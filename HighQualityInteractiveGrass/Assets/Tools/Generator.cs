@@ -3,10 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [CustomEditor(typeof(Camera))]
 public class Generator : UnityEditor.Editor
 {
+    #region contants
+    private const float radius = 0.5f;
+    #endregion
+    
     #region fields
     // [SerializeField]
     // private Transform groundTransform;
@@ -34,6 +39,7 @@ public class Generator : UnityEditor.Editor
         {
             root = new GameObject("Root");
             root.tag = "Root";
+            root.layer = 9;
         }
 
         grassPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Samples/Prefabs/Grass.prefab");
@@ -56,9 +62,17 @@ public class Generator : UnityEditor.Editor
             Ray ray = HandleUtility.GUIPointToWorldRay(currentEvent.mousePosition);
             RaycastHit raycastHit;
 
-            if (Physics.Raycast(ray, out raycastHit, Mathf.Infinity))
+            if (Physics.Raycast(ray, out raycastHit, Mathf.Infinity, 9))
             {
-                GameObject lastCreateed = Instantiate<GameObject>(grassPrefab, raycastHit.point, Quaternion.identity, root.transform);
+                Vector3 pos = raycastHit.point;
+                
+                for (int i = 0; i < 20; ++i)
+                {
+                    Vector3 randomPos = Random.insideUnitSphere * radius;
+                    randomPos += pos;
+                    GameObject lastCreateed = Instantiate<GameObject>(grassPrefab, randomPos, Quaternion.identity, root.transform);
+                }
+                
             }
         }
 
