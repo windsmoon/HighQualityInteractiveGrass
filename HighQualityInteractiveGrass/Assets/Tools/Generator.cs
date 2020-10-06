@@ -1,55 +1,105 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class Generator : MonoBehaviour
+[CustomEditor(typeof(Camera))]
+public class Generator : UnityEditor.Editor
 {
     #region fields
-    [SerializeField]
-    private Transform groundTransform;
-    [SerializeField]
-    private Mesh groundMesh;
-    [SerializeField]
+    // [SerializeField]
+    // private Transform groundTransform;
+    // [SerializeField]
+    // private Mesh groundMesh;
+    // [SerializeField]
+    // private GameObject grassPrefab;
+    // [SerializeField]
+    // private GameObject grassLOD0;
+    // [SerializeField]
+    // private GameObject grassLOD1;
+    // [SerializeField]
+    // private GameObject grassLOD2;
+    private GameObject root;
+    private GameObject lastCreateed;
     private GameObject grassPrefab;
-    [SerializeField]
-    private GameObject grassLOD0;
-    [SerializeField]
-    private GameObject grassLOD1;
-    [SerializeField]
-    private GameObject grassLOD2;
+    #endregion
+
+    #region unity 
+    private void OnEnable()
+    {
+        root = GameObject.FindWithTag("Root");
+
+        if (root == null)
+        {
+            root = new GameObject("Root");
+            root.tag = "Root";
+        }
+
+        grassPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Samples/Prefabs/Grass.prefab");
+    }
+
+    private void OnSceneGUI()
+    {
+        HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+
+        Event currentEvent = Event.current;
+
+        if (currentEvent.isMouse && currentEvent.button == 0 && currentEvent.clickCount == 1)
+        {
+            if (grassPrefab == null)
+            {
+                Debug.LogError("No Grass Prefab");
+                return;    
+            }
+            
+            Ray ray = HandleUtility.GUIPointToWorldRay(currentEvent.mousePosition);
+            RaycastHit raycastHit;
+
+            if (Physics.Raycast(ray, out raycastHit, Mathf.Infinity))
+            {
+                GameObject lastCreateed = Instantiate<GameObject>(grassPrefab, raycastHit.point, Quaternion.identity, root.transform);
+            }
+        }
+
+        else if (currentEvent.isKey && currentEvent.keyCode == KeyCode.LeftControl && currentEvent.keyCode == KeyCode.Z)
+        {
+            DestroyImmediate(lastCreateed);
+        }
+    }
+
     #endregion
     
     #region methods
-    [ContextMenu("Generate Grass Sea")]
-    public void GenerateGrassSea()
-    {
-        // Vector3[] vertices = groundMesh.vertices;
-        // Matrix4x4 objectToWorldMatrix = groundTransform.localToWorldMatrix;
-        // List<Vector3> worldPosList = new List<Vector3>(vertices.Length);
-        // GameObject grassGroup = new GameObject("Grass Group");
-        // Transform grassGroupTransform = grassGroup.transform;
-        //
-        //
-        // for (int i = 1; i < vertices.Length / 4; ++i)
-        // {
-        //     // worldPosList.Add(objectToWorldMatrix * vertex);
-        //     Vector3 vertex = vertices[i];
-        //     Vector3 worldPos = objectToWorldMatrix * vertex;
-        //     Instantiate<GameObject>(grassLOD0, worldPos, Quaternion.identity, grassGroupTransform);
-        // }
-
-        GameObject grassGroup = new GameObject("Grass Group");
-        float grassWidth = 0.05f;
-
-        for (int i = 0; i < 20; ++i)
-        {
-            for (int j = 0; j < 20; ++j)
-            {
-                GameObject lod0 = Instantiate<GameObject>(grassPrefab, new Vector3(i * 0.1f - 0.05f, 0, j * 0.1f - 0.05f), Quaternion.identity, grassGroup.transform);
-            }
-        }
-    }
+    // [ContextMenu("Generate Grass Sea")]
+    // public void GenerateGrassSea()
+    // {
+    //     // Vector3[] vertices = groundMesh.vertices;
+    //     // Matrix4x4 objectToWorldMatrix = groundTransform.localToWorldMatrix;
+    //     // List<Vector3> worldPosList = new List<Vector3>(vertices.Length);
+    //     // GameObject grassGroup = new GameObject("Grass Group");
+    //     // Transform grassGroupTransform = grassGroup.transform;
+    //     //
+    //     //
+    //     // for (int i = 1; i < vertices.Length / 4; ++i)
+    //     // {
+    //     //     // worldPosList.Add(objectToWorldMatrix * vertex);
+    //     //     Vector3 vertex = vertices[i];
+    //     //     Vector3 worldPos = objectToWorldMatrix * vertex;
+    //     //     Instantiate<GameObject>(grassLOD0, worldPos, Quaternion.identity, grassGroupTransform);
+    //     // }
+    //
+    //     GameObject grassGroup = new GameObject("Grass Group");
+    //     float grassWidth = 0.05f;
+    //
+    //     for (int i = 0; i < 20; ++i)
+    //     {
+    //         for (int j = 0; j < 20; ++j)
+    //         {
+    //             GameObject lod0 = Instantiate<GameObject>(grassPrefab, new Vector3(i * 0.1f - 0.05f, 0, j * 0.1f - 0.05f), Quaternion.identity, grassGroup.transform);
+    //         }
+    //     }
+    // }
     
     [MenuItem("HighQualityInteravtiveGrass/GenerateGround")]
     public static void GenerateGround()
