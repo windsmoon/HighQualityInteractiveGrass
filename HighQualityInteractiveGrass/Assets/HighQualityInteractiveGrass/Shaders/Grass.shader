@@ -51,7 +51,7 @@
 
             fixed4 frag(v2f i) : SV_Target
             {
-                fixed4 col = tex2D(_GrassColor, i.uv) * _ColorTint * i.color;
+                fixed4 col = tex2D(_GrassColor, i.uv) * _ColorTint;
                 fixed mask = tex2D(_GrassMask, i.uv).r;
                 clip(mask - 0.0001f);
                 return col;
