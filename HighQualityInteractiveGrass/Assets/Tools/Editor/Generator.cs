@@ -5,11 +5,13 @@ using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-[CustomEditor(typeof(Camera))]
+[CustomEditor(typeof(GeneratorBehaviour))]
 public class Generator : UnityEditor.Editor
 {
     #region contants
     private const float radius = 0.5f;
+    private const float minScale = 0.6f;
+    private const float maxScale = 1.4f;
     #endregion
     
     #region fields
@@ -30,7 +32,7 @@ public class Generator : UnityEditor.Editor
     private GameObject grassPrefab;
     #endregion
 
-    #region unity 
+    #region unity methods
     private void OnEnable()
     {
         root = GameObject.FindWithTag("Root");
@@ -65,14 +67,17 @@ public class Generator : UnityEditor.Editor
             if (Physics.Raycast(ray, out raycastHit, Mathf.Infinity, 9))
             {
                 Vector3 pos = raycastHit.point;
-                
+                // GameObject lastCreateed = Instantiate<GameObject>(grassPrefab, pos, Quaternion.identity, root.transform);
+
                 for (int i = 0; i < 20; ++i)
                 {
                     Vector3 randomPos = Random.insideUnitSphere * radius;
+                    randomPos.y = 0;
                     randomPos += pos;
                     GameObject lastCreateed = Instantiate<GameObject>(grassPrefab, randomPos, Quaternion.identity, root.transform);
+                    Vector3 scale = new Vector3(Random.Range(minScale, maxScale), Random.Range(minScale, maxScale), Random.Range(minScale, maxScale));
+                    lastCreateed.transform.localScale = scale;
                 }
-                
             }
         }
 
@@ -114,6 +119,19 @@ public class Generator : UnityEditor.Editor
     //         }
     //     }
     // }
+
+    [MenuItem("HighQualityInteravtiveGrass/Show Vertices")]
+    public static void ShowVertices()
+    {
+        GameObject gameObject = Selection.activeGameObject;
+        MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
+        Mesh mesh = meshFilter.sharedMesh;
+
+        foreach (Vector3 vertex in mesh.vertices)
+        {
+            Debug.Log(vertex);
+        }
+    }
     
     [MenuItem("HighQualityInteravtiveGrass/GenerateGround")]
     public static void GenerateGround()
