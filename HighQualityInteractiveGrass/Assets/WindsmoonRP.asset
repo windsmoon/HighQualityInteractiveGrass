@@ -18,7 +18,7 @@ MonoBehaviour:
   useSPRBatcher: 1
   useLightsPerObject: 1
   shadowSettings:
-    maxDistance: 50
+    maxDistance: 12
     distanceFade: 0.1
     directionalShadowSetting:
       ShadowMapSize: 4096
