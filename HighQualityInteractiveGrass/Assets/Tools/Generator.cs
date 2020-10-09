@@ -39,7 +39,7 @@ public class Generator : UnityEditor.Editor
         {
             root = new GameObject("Root");
             root.tag = "Root";
-            root.layer = 9;
+            // root.layer = 9;
         }
 
         grassPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Samples/Prefabs/Grass.prefab");
