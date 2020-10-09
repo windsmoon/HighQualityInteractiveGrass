@@ -74,9 +74,12 @@ public class Generator : UnityEditor.Editor
                     Vector3 randomPos = Random.insideUnitSphere * radius;
                     randomPos.y = 0;
                     randomPos += pos;
-                    GameObject lastCreateed = Instantiate<GameObject>(grassPrefab, randomPos, Quaternion.identity, root.transform);
+                    // GameObject lastCreateed = Instantiate<GameObject>(grassPrefab, randomPos, Quaternion.identity, root.transform);
+                    GameObject lastCreated = PrefabUtility.InstantiatePrefab(grassPrefab) as GameObject;
+                    lastCreated.transform.position = randomPos;
                     Vector3 scale = new Vector3(Random.Range(minScale, maxScale), Random.Range(minScale, maxScale), Random.Range(minScale, maxScale));
-                    lastCreateed.transform.localScale = scale;
+                    lastCreated.transform.localScale = scale;
+                    lastCreated.transform.SetParent(root.transform, true);
                 }
             }
         }
