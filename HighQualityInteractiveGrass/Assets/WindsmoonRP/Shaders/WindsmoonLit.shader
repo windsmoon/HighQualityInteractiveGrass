@@ -29,6 +29,7 @@
 		[Enum(Off, 0, On, 1)] _ZWrite("Z Write", Float) = 1
 		[KeywordEnum(On, Clip, Dither, Off)] _Shadow_Mode("Shadow Mode", Float) = 0
 		[Toggle(RECEIVE_SHADOWS)] _ReceiveShadows ("Receive Shadows", Float) = 1
+    	[Toggle(GRASS)] _Grass ("Grass", Float) = 0
 		[HideInInspector] _MainTex("Texture for Lightmap", 2D) = "white" {}
 		[HideInInspector] _Color("Color for Lightmap", Color) = (0.5, 0.5, 0.5, 1.0)
     }
@@ -38,6 +39,7 @@
         HLSLINCLUDE
         #include "WindsmoonCommon.hlsl"
         #include "WindsmoonLitInput.hlsl"
+        #include "WindsmoonGrass.hlsl"
         ENDHLSL
         
         Pass
@@ -60,6 +62,7 @@
             #pragma multi_compile _ CASCADE_BLEND_SOFT CASCADE_BLEND_DITHER
             #pragma multi_compile _ SHADOW_MASK_ALWAYS SHADOW_MASK_DISTANCE
             #pragma multi_compile _ RECEIVE_SHADOWS
+            #pragma multi_compile _ GRASS
             #pragma multi_compile _ LIGHTMAP_ON
             #pragma multi_compile _ LOD_FADE_CROSSFADE
             #pragma multi_compile _ NORMAL_MAP
@@ -88,6 +91,8 @@
 //            #pragma multi_compile _ ALPHA_CLIPPING
             #pragma multi_compile _ _SHADOW_MODE_CLIP _SHADOW_MODE_DITHER
             #pragma multi_compile _ LOD_FADE_CROSSFADE
+            #pragma multi_compile _ GRASS
+
             #pragma multi_compile_instancing
 			#pragma vertex ShadowCasterVertex
 			#pragma fragment ShadowCasterFragment
