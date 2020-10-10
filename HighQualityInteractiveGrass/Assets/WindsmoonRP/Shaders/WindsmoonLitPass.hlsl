@@ -70,7 +70,7 @@ Varyings LitVertex(Attribute input)
     output.positionWS = TransformObjectToWorld(input.positionOS);
 
 	#if defined(GRASS)
-		 HandleInteractiveGrass(output.positionWS, input.color);
+		 HandleInteractiveGrass(output.positionWS, input.positionOS, input.color);
 	#endif
 	
 	output.positionCS = TransformWorldToHClip(output.positionWS);
