@@ -5,7 +5,9 @@ void HandleWindEffect(inout float3 posWS, float3 posOS, float4 factor)
 {
     float random01 = Random01(posWS);
     float4 windEffect = GetWindEffect();
-    float timeScale = sin(_Time.y * windEffect.w + posWS.x);
+    float timeScale = 0.5f * sin(_Time.y * windEffect.w + posWS.x) + 0.5f;
+    // float timeScale = sin(_Time.y * windEffect.w + posWS.x) ;
+
     float windDirection = normalize(windEffect.xyz);
     float3 offset = windDirection * min(windEffect.w, posOS.y * GetMaxWindEffect()) * factor.r * timeScale; // windEffect.w affect the max offset by wind
     float squaredXZOffset = Square(offset.x) + Square(offset.z);
