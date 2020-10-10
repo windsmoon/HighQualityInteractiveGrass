@@ -157,6 +157,57 @@ public class Generator : UnityEditor.Editor
         AssetDatabase.SaveAssets();
     }
     
+    [MenuItem("HighQualityInteravtiveGrass/Handle Vertices Slice")]
+    public static void HandleVerticesSlice()
+    {
+        Mesh mesh = Selection.activeObject as Mesh;
+        mesh = Instantiate<Mesh>(mesh);
+        Color[] colors = new Color[mesh.vertexCount];
+        Vector3[] vertices = new Vector3[mesh.vertexCount];
+        
+        for (int i = 0; i < mesh.vertexCount; ++i)
+        {
+            Vector3 vertex = mesh.vertices[i];
+
+            if (vertex.y > 0.006)
+            {
+                colors[i] = new Color(1, 0, 0, 1);
+            }
+
+            else if (vertex.y > 0.005)
+            {
+                colors[i] = new Color(0.005680976f / 0.006999574f, 0, 0, 1);
+            }
+
+            else if (vertex.y > 0.004)
+            {
+                colors[i] = new Color(0.00423920f / 0.006999574f, 0, 0, 1);
+            }
+
+            else if (vertex.y > 0.002)
+            {
+                colors[i] = new Color(0.0024217f / 0.006999574f, 0, 0, 1);
+            }
+
+            else
+            {
+                colors[i] = new Color(0, 0, 0, 1);
+                vertices[i] = new Vector3(vertex.x * 100f, 0, vertex.z * 100f);
+                continue;
+            }
+
+            vertices[i] = new Vector3(vertex.x * 100f, vertex.y * 100f, vertex.z * 100f);
+        }
+
+        mesh.colors = colors;
+        mesh.vertices = vertices;
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
+        mesh.RecalculateTangents();
+        AssetDatabase.CreateAsset(mesh, "Assets/GrassSlice.mesh");
+        AssetDatabase.SaveAssets();
+    }
+    
     [MenuItem("HighQualityInteravtiveGrass/Show Vertices")]
     public static void ShowVertices()
     {
@@ -166,9 +217,11 @@ public class Generator : UnityEditor.Editor
         {
             Vector3 vertex = mesh.vertices[i];
 
-            Debug.Log(vertex.x + " " + vertex.y + " " + vertex.z);
+            Debug.Log(vertex.y);
+
+            // Debug.Log(vertex.x + " " + vertex.y + " " + vertex.z);
             Debug.Log(mesh.colors[i]);
-            // Debug.Log(mesh.uv[i]);
+            Debug.Log(mesh.uv[i]);
         }
     }
     
