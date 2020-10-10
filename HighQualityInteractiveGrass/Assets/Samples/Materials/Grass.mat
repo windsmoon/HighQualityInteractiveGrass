@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Grass
   m_Shader: {fileID: 4800000, guid: ca037da60c36b5747bc91dba73d69bdc, type: 3}
-  m_ShaderKeywords: RECEIVE_SHADOWS _SHADOW_MODE_ON
+  m_ShaderKeywords: GRASS RECEIVE_SHADOWS _SHADOW_MODE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -93,7 +93,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Grass: 0
+    - _Grass: 1
     - _MaskMapToggle: 0
     - _Metallic: 0
     - _Mode: 0
@@ -116,3 +116,5 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorTint: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _WindEffect: {r: 1, g: 0, b: -1.11, a: 0.1}
+    - _WindSpeed: {r: 1, g: 0, b: 0, a: 1}

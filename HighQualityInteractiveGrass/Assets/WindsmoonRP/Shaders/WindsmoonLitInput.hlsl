@@ -25,6 +25,8 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
     UNITY_DEFINE_INSTANCED_PROP(float, _DetailSmoothness)
     UNITY_DEFINE_INSTANCED_PROP(float, _NormalScale)
     UNITY_DEFINE_INSTANCED_PROP(float, _DetailNormalScale)
+    UNITY_DEFINE_INSTANCED_PROP(float4, _WindEffect)
+    UNITY_DEFINE_INSTANCED_PROP(float, _WindSpeed)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
 #define INPUT_PROP(name) UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, name)
@@ -160,6 +162,16 @@ float3 GetEmission(InputConfig config)
     float4 emissionMap = SAMPLE_TEXTURE2D(_EmissionMap, sampler_BaseMap, config.uv);
     float4 emissionColor = INPUT_PROP(_EmissionColor);
     return emissionMap.rgb * emissionColor.rgb;
+}
+
+float4 GetWindEffect()
+{
+    return INPUT_PROP(_WindEffect);
+}
+
+float GetWindSpeed()
+{
+    return INPUT_PROP(_WindSpeed);
 }
 
 #endif

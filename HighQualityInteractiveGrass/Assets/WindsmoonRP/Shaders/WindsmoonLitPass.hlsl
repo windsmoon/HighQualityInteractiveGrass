@@ -28,7 +28,7 @@ struct Attribute
 {
     float3 positionOS : POSITION;
     float3 normalOS : NORMAL;
-	float3 color : COLOR;
+	float4 color : COLOR;
 
 	#if defined(NORMAL_MAP)
 		float4 tangentOS : TANGENT; // it should be omitted automatically
@@ -44,7 +44,7 @@ struct Varyings
     float4 positionCS : SV_Position;
     float3 positionWS : VAR_POSITION;
     float3 normalWS : VAR_NORMAL;
-	float3 color : VAR_COLOR;
+	float4 color : VAR_COLOR;
 
 	#if defined(NORMAL_MAP)
 		float4 tangentWS : VAR_TANGENT;
@@ -70,7 +70,7 @@ Varyings LitVertex(Attribute input)
     output.positionWS = TransformObjectToWorld(input.positionOS);
 
 	#if defined(GRASS)
-		output.positionWS = HandleInteractiveGrass(output.positionWS);
+		 HandleInteractiveGrass(output.positionWS, input.color);
 	#endif
 	
 	output.positionCS = TransformWorldToHClip(output.positionWS);

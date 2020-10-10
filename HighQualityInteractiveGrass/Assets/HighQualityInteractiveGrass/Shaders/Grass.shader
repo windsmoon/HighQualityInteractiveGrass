@@ -38,7 +38,7 @@
         HLSLINCLUDE
         #include "Assets/WindsmoonRP/Shaders/WindsmoonCommon.hlsl"
         #include "Assets/WindsmoonRP/Shaders/WindsmoonLitInput.hlsl"
-        #include "WindsmoonGrass.hlsl"
+        // #include "WindsmoonGrass.hlsl"
         ENDHLSL
         
         Pass

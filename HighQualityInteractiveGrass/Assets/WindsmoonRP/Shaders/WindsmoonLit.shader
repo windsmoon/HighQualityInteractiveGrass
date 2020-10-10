@@ -30,6 +30,8 @@
 		[KeywordEnum(On, Clip, Dither, Off)] _Shadow_Mode("Shadow Mode", Float) = 0
 		[Toggle(RECEIVE_SHADOWS)] _ReceiveShadows ("Receive Shadows", Float) = 1
     	[Toggle(GRASS)] _Grass ("Grass", Float) = 0
+    	_WindEffect("Wind Effect (RGB Direction A Strength)", Vector) = (1, 0, 0, 1)
+    	_WindSpeed("Wind Speed", Vector) = 1
 		[HideInInspector] _MainTex("Texture for Lightmap", 2D) = "white" {}
 		[HideInInspector] _Color("Color for Lightmap", Color) = (0.5, 0.5, 0.5, 1.0)
     }
@@ -39,7 +41,6 @@
         HLSLINCLUDE
         #include "WindsmoonCommon.hlsl"
         #include "WindsmoonLitInput.hlsl"
-        #include "WindsmoonGrass.hlsl"
         ENDHLSL
         
         Pass
@@ -72,7 +73,8 @@
             #pragma multi_compile_instancing
             #pragma vertex LitVertex
             #pragma fragment LitFragment
-            
+
+            #include "WindsmoonGrass.hlsl"
             #include "WindsmoonLitPass.hlsl"
             ENDHLSL
         }
@@ -96,7 +98,8 @@
             #pragma multi_compile_instancing
 			#pragma vertex ShadowCasterVertex
 			#pragma fragment ShadowCasterFragment
-			
+
+            #include "WindsmoonGrass.hlsl"
 			#include "WindsmoonShadowCasterPass.hlsl"
             ENDHLSL
         }
