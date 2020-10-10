@@ -3,7 +3,7 @@
 
 void HandleWindEffect(inout float3 posWS, float3 posOS, float4 factor)
 {
-    float random01 = Random01(posWS);
+    float random01 = Random01(posWS * 100); // posWS is near ??
     float4 windEffect = GetWindEffect();
     float timeScale = 0.5f * sin(_Time.y * windEffect.w + posWS.x) + 0.5f;
     // float timeScale = sin(_Time.y * windEffect.w + posWS.x) ;
