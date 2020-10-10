@@ -26,7 +26,7 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
     UNITY_DEFINE_INSTANCED_PROP(float, _NormalScale)
     UNITY_DEFINE_INSTANCED_PROP(float, _DetailNormalScale)
     UNITY_DEFINE_INSTANCED_PROP(float4, _WindEffect)
-    UNITY_DEFINE_INSTANCED_PROP(float, _MaxWindEffect)
+    UNITY_DEFINE_INSTANCED_PROP(float, _MaxGrassOffsetScale)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
 #define INPUT_PROP(name) UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, name)
@@ -169,9 +169,9 @@ float4 GetWindEffect()
     return INPUT_PROP(_WindEffect);
 }
 
-float GetMaxWindEffect()
+float GetMaxGrassOffsetScale()
 {
-    return INPUT_PROP(_MaxWindEffect);
+    return INPUT_PROP(_MaxGrassOffsetScale);
 }
 
 #endif
