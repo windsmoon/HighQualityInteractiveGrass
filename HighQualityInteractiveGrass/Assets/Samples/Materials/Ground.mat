@@ -85,6 +85,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _Grass: 0
     - _MaskMapToggle: 0
     - _Metallic: 0
     - _Mode: 0
@@ -101,8 +102,10 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
+    - _WindSpeed: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.15496778, g: 1, b: 0, a: 1}
+    - _Color: {r: 0.15496778, g: 1, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _WindEffect: {r: 1, g: 0, b: 0, a: 1}

@@ -3,13 +3,14 @@
 
 void HandleWindEffect(inout float3 posWS, float3 posOS, float4 factor)
 {
-    float random = Random(posWS);
+    float random01 = Random01(posWS);
     float4 windEffect = GetWindEffect();
-    float timeScale = sin(_Time.y * GetWindSpeed() + posWS.x);
+    float timeScale = sin(_Time.y * windEffect.w + posWS.x);
     float windDirection = normalize(windEffect.xyz);
-    float3 offset = windDirection * windEffect.w * factor.r * timeScale;
+    float3 offset = windDirection * min(windEffect.w, posOS.y * GetMaxWindEffect()) * factor.r * timeScale; // windEffect.w affect the max offset by wind
     float squaredXZOffset = Square(offset.x) + Square(offset.z);
-    squaredXZOffset *= random;
+    squaredXZOffset *= random01;
+    // squaredXZOffset = min(squaredXZOffset, 0.01 * posOS.y); // max offset xz is 0.5 grass height
     float squareSlopeLenght = squaredXZOffset + Square(posOS.y);
     float scale = posOS.y / (sqrt(squareSlopeLenght) + 0.00001f);
     offset.y = -(posOS.y - posOS.y * scale);

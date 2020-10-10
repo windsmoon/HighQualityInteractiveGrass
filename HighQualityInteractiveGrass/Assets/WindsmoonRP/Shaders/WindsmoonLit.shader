@@ -31,7 +31,7 @@
 		[Toggle(RECEIVE_SHADOWS)] _ReceiveShadows ("Receive Shadows", Float) = 1
     	[Toggle(GRASS)] _Grass ("Grass", Float) = 0
     	_WindEffect("Wind Effect (RGB Direction A Strength)", Vector) = (1, 0, 0, 1)
-    	_WindSpeed("Wind Speed", Float) = 1
+    	_MaxWindEffect("Max Wind Effect (decide the max offset)", Float) = 0.3
 		[HideInInspector] _MainTex("Texture for Lightmap", 2D) = "white" {}
 		[HideInInspector] _Color("Color for Lightmap", Color) = (0.5, 0.5, 0.5, 1.0)
     }

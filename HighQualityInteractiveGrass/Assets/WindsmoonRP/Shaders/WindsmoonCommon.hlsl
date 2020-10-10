@@ -68,9 +68,9 @@ float3 GetWorldNormalFromTangent(float3 normalTS, float3 normalWS, float4 tangen
     return TransformTangentToWorld(normalTS, tangentToWorld);
 }
 
-half Random(float3 number)
+half Random01(float3 number)
 {
-    return frac(sin( dot(number.xyz ,float3(12.9898,78.233,45.5432) )) * 43758.5453);
+    return frac(sin(dot(number.xyz ,float3(12.9898,78.233,45.5432))) * 43758.5453);
 }
 
 #endif
