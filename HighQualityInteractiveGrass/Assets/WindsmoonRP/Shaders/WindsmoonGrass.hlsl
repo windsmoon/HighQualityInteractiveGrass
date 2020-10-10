@@ -27,22 +27,24 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
         float4 interactiveObject = _InteractiveObjects[i];
         float3 interactiveObjectPosWS = interactiveObject.xyz;
         float3 interactiveOffset = posWS - interactiveObjectPosWS;
-        float squareInteractiveXZOffset = Square(interactiveOffset.x) + Square(interactiveOffset.z);
-        float3 squareInteractiveOffsetScale = saturate(squareInteractiveXZOffset / (0.25f * 0.25f)); // todo ： add object area
+        float squaredInteractiveXZLength = Square(interactiveOffset.x) + Square(interactiveOffset.z);
+        float squaredInteractiveXZLengthScale = squaredInteractiveXZLength / (0.25f * 0.25f); // todo ： add object area
         //
-        // if ((interactiveOffset.x * interactiveOffset.x + interactiveOffset.z + interactiveOffset.z) > (0.25 * 0.25)) 
-        // {
-        // }
-        //
-        // else
-        // {
-        //     
-        // }
+        if ((interactiveOffset.x * interactiveOffset.x + interactiveOffset.z * interactiveOffset.z) > (1 * 1)) 
+        // if (squaredInteractiveXZLengthScale > 0)
+        {
+        }
+        
+        else
+        {
+            offset.x = lerp(interactiveOffset.x > 0 ? maxOffset : -maxOffset, offset.x, saturate(interactiveOffset.x / 0.25)) * factor.r;
+            offset.z = lerp(interactiveOffset.z > 0 ? maxOffset : -maxOffset, offset.z, saturate(interactiveOffset.z / 0.25)) * factor.r;
+        }
 
         // offset = lerp(maxOffset, offset, )
         // todo : wind max offset and interactive max offset
-        offset.x = lerp(interactiveOffset.x > 0 ? maxOffset : -maxOffset, offset.x, squareInteractiveOffsetScale.x);
-        offset.z = lerp(interactiveOffset.z > 0 ? maxOffset : -maxOffset, offset.z, squareInteractiveOffsetScale.z);
+        // offset.x = lerp(interactiveOffset.x > 0 ? maxOffset : -maxOffset, offset.x, squaredInteractiveXZLengthScale * saturate(interactiveOffset.x / 0.25));
+        // offset.z = lerp(interactiveOffset.z > 0 ? maxOffset : -maxOffset, offset.z, squaredInteractiveXZLengthScale * saturate(interactiveOffset.z / 0.25));
     }
     
     // caculate y offset
