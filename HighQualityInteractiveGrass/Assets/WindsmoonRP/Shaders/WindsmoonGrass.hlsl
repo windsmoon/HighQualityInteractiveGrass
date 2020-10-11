@@ -14,6 +14,7 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
     float random01 = Random01(posWS * 100); // posWS is near ??
     float maxOffsetScale = GetMaxGrassOffsetScale();
     float maxOffset = posOS.y * maxOffsetScale;
+    float maxInteracitveOffset = min(maxOffset * 2, 1);
     
     // wind effect
     float4 windEffect = GetWindEffect();
@@ -28,23 +29,14 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
         float3 interactiveObjectPosWS = interactiveObject.xyz;
         float3 interactiveOffset = posWS - interactiveObjectPosWS;
         float squaredInteractiveXZLength = Square(interactiveOffset.x) + Square(interactiveOffset.z);
-        float squaredInteractiveXZLengthScale = squaredInteractiveXZLength / (0.25f * 0.25f); // todo ： add object area
+        float squaredInteractiveXZLengthScale = squaredInteractiveXZLength / 1; // todo ： add object area
         //
-        if ((interactiveOffset.x * interactiveOffset.x + interactiveOffset.z * interactiveOffset.z) > (1 * 1)) 
-        // if (squaredInteractiveXZLengthScale > 0)
+        // if ((interactiveOffset.x * interactiveOffset.x + interactiveOffset.z * interactiveOffset.z) > (1 * 1)) 
+        if (squaredInteractiveXZLengthScale < 1)
         {
+            offset.x += lerp(interactiveOffset.x > 0 ? maxInteracitveOffset : -maxInteracitveOffset, offset.x, saturate(interactiveOffset.x / 0.25)) * factor.r;
+            offset.z += lerp(interactiveOffset.z > 0 ? maxInteracitveOffset : -maxInteracitveOffset, offset.z, saturate(interactiveOffset.z / 0.25)) * factor.r;
         }
-        
-        else
-        {
-            offset.x = lerp(interactiveOffset.x > 0 ? maxOffset : -maxOffset, offset.x, saturate(interactiveOffset.x / 0.25)) * factor.r;
-            offset.z = lerp(interactiveOffset.z > 0 ? maxOffset : -maxOffset, offset.z, saturate(interactiveOffset.z / 0.25)) * factor.r;
-        }
-
-        // offset = lerp(maxOffset, offset, )
-        // todo : wind max offset and interactive max offset
-        // offset.x = lerp(interactiveOffset.x > 0 ? maxOffset : -maxOffset, offset.x, squaredInteractiveXZLengthScale * saturate(interactiveOffset.x / 0.25));
-        // offset.z = lerp(interactiveOffset.z > 0 ? maxOffset : -maxOffset, offset.z, squaredInteractiveXZLengthScale * saturate(interactiveOffset.z / 0.25));
     }
     
     // caculate y offset

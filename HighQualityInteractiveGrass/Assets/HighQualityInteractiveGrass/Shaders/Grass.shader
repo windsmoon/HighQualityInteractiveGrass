@@ -1,120 +1,331 @@
-﻿Shader "Windsmoon RP/Windsmoon Lit"
+﻿Shader "WalkingFat/DynamicGrass"
 {
     Properties
     {
-        _BaseMap("Base Texture", 2D) = "white" {}
-        _BaseColor("Base Color", Color) = (1.0, 1.0, 1.0, 1.0)
-        _Cutoff ("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
-        [Toggle(ALPHA_CLIPPING)] _AlphaClipping ("Alpha Clipping", Float) = 0
-        [Toggle(PREMULTIPLY_ALPHA)] _PremultiplyAlpha ("Premultiply Alpha", Float) = 0
-		[Toggle(MASK_MAP)] _MaskMapToggle("Use Mask Map", Float) = 0
-		[NoScaleOffset] _MaskMap("Mask Map (MODS)", 2D) = "white" {}
-        _Metallic("Metallic", Range(0, 1)) = 0
-		_Occlusion("Occlusion", Range(0, 1)) = 0
-		_Smoothness("Smoothness", Range(0, 1)) = 0.5
-		_Fresnel("Fresnel", Range(0, 1)) = 1
-		[Toggle(NORMAL_MAP)] _NormalMapToggle("Use Normal Map", Float) = 0
-		[NoScaleOffset] _NormalMap("Normal Map", 2D) = "bump" {}
-		_NormalScale("Normal Scale", Range(0, 1)) = 1
-		[NoScaleOffset] _EmissionMap("Emmision Map", 2D) = "white" {}
-        [HDR] _EmissionColor("Emission Color", Color) = (0.0, 0.0, 0.0, 0.0)
-		[Toggle(DETAIL_MAP)] _DetailMapToggle("Use Detail Map", Float) = 0
-		_DetailMap("Detail Map", 2D) = "linearGrey" {}
-		[NoScaleOffset] _DetailNormalMap("Detail Normal Map", 2D) = "bump" {}
-		_DetailAlbedo("Detail Albedo", Range(0, 1)) = 1
-		_DetailSmoothness("Detail Smoothness", Range(0, 1)) = 1
-		_DetailNormalScale("Detail Normal Scale", Range(0, 1)) = 1
-        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Src Blend", Float) = 1
-		[Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("Dst Blend", Float) = 0
-		[Enum(Off, 0, On, 1)] _ZWrite("Z Write", Float) = 1
-		[KeywordEnum(On, Clip, Dither, Off)] _Shadow_Mode("Shadow Mode", Float) = 0
-		[Toggle(RECEIVE_SHADOWS)] _ReceiveShadows ("Receive Shadows", Float) = 1
-		[HideInInspector] _MainTex("Texture for Lightmap", 2D) = "white" {}
-		[HideInInspector] _Color("Color for Lightmap", Color) = (0.5, 0.5, 0.5, 1.0)
+        _MainTex ("Texture", 2D) = "white" {}
+        _GrassColorTop ("Grass Color Top", Color) = (1 ,1 ,1 ,1)
+        _GrassColorBottom ("Grass Color Bottom", Color) = (1 ,1 ,1 ,1)
+        _ShadowColor ("Shadow Color", Color) = (1 ,1 ,1 ,1)
+        _GradientTex ("Gradient Tex", 2D) = "white" {}
+        // grass hit obstacle
+        _EffectTopOffset ("Effect Top Offset", float) = 2
+        _EffectBottomOffset ("Effect Bottom Offseth", float) = -1
+        _OffsetGradientStrength ("Offset Gradient Strength", range (0,1)) = 0.7
+        _OffsetFixedRoots ("Offset Fixed Roots", range (0,1)) = 1
+        _OffsetMultiplier ("Offset Multiplier", range (0.1,2)) = 2
+        _GravityGradientStrength ("Gravity Gradient Strength", range (0,1)) = 0
+        _GravityFixedRoots ("Gravity Fixed Roots", range (0,1)) = 0.7
+        _GravityMultiplier ("Gravity Multiplier", range (0,1)) = 0.7
+        // shake with wind
+        _ShakeWindspeed ("Shake Wind speed", float) = 0
+        _ShakeBending ("Shake Bending", float) = 0
+        _WindDirectionX ("Wind Direction X", range (-1,1)) = 0
+        _WindDirectionZ ("Wind Direction Z", range (-1,1)) = 0
+        _WindStrength ("Wind Strength", range (0,2)) = 0.5
+        _WindDirRate ("Wind Direction Rate", float) = 0.5
     }
-    
+
     SubShader
     {
-        HLSLINCLUDE
-        #include "Assets/WindsmoonRP/Shaders/WindsmoonCommon.hlsl"
-        #include "Assets/WindsmoonRP/Shaders/WindsmoonLitInput.hlsl"
-        // #include "WindsmoonGrass.hlsl"
-        ENDHLSL
-        
-        Pass
+        Tags
         {
-            Tags
-            {
-                "LightMode" = "WindsmoonLit"
-            }
-            
-            Blend [_SrcBlend] [_DstBlend]
-            ZWrite [_ZWrite]
-//        	Cull Off
-            
-            HLSLPROGRAM
-            #pragma target 3.5 // for loops which are use a variable length
-            #pragma multi_compile _ ALPHA_CLIPPING
-            #pragma multi_compile _ PREMULTIPLY_ALPHA
-            #pragma multi_compile _ DIRECTIONAL_PCF3X3 DIRECTIONAL_PCF5X5 DIRECTIONAL_PCF7X7
-            #pragma multi_compile _ OTHER_PCF3X3 OTHER_PCF5X5 OTHER_PCF7X7
-            #pragma multi_compile _ CASCADE_BLEND_SOFT CASCADE_BLEND_DITHER
-            #pragma multi_compile _ SHADOW_MASK_ALWAYS SHADOW_MASK_DISTANCE
-            #pragma multi_compile _ RECEIVE_SHADOWS
-            #pragma multi_compile _ LIGHTMAP_ON
-            #pragma multi_compile _ LOD_FADE_CROSSFADE
-            #pragma multi_compile _ NORMAL_MAP
-            #pragma multi_compile _ MASK_MAP
-            #pragma multi_compile _ DETAIL_MAP
-            #pragma multi_compile _ LIGHTS_PER_OBJECT
-            #pragma multi_compile_instancing
-            #pragma vertex LitVertex
-            #pragma fragment LitFragment
-            
-            #include "Assets/WindsmoonRP/Shaders/WindsmoonLitPass.hlsl"
-            ENDHLSL
+            "RenderType"="Opaque"
         }
         
-        Pass
-        {
-            Tags
-            {
-                "LightMode" = "ShadowCaster"
-            }
-            
-            ColorMask 0
-            
-            HLSLPROGRAM
-            #pragma target 3.5 // for loops which are use a variable length
-//            #pragma multi_compile _ ALPHA_CLIPPING
-            #pragma multi_compile _ _SHADOW_MODE_CLIP _SHADOW_MODE_DITHER
-            #pragma multi_compile _ LOD_FADE_CROSSFADE
-            #pragma multi_compile_instancing
-			#pragma vertex ShadowCasterVertex
-			#pragma fragment ShadowCasterFragment
-			
-			#include "Assets/WindsmoonRP/Shaders/WindsmoonShadowCasterPass.hlsl"
-            ENDHLSL
-        }
+        LOD 100
         
         Pass
         {
-            Tags
+            Tags { "LightMode" = "ForwardBase" }
+            Cull Off
+
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            // make fog work
+            #pragma multi_compile_fog
+            // make light work
+            #pragma multi_compile_fwdbase
+            #include "AutoLight.cginc"
+            // make shadow work
+            #pragma multi_compile_fwdbase_fullshadows
+            #include "UnityCG.cginc"
+
+            struct appdata
             {
-                "LightMode" = "Meta"
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float2 uv : TEXCOORD0;
+                float4 posWorld : TEXCOORD1;
+                float4 pos : SV_POSITION;
+                UNITY_FOG_COORDS(2)
+                LIGHTING_COORDS(3,4)
+            };
+
+            // basic
+            float4 _GrassColorTop, _GrassColorBottom, _ShadowColor;
+            sampler2D _MainTex, _GradientTex;
+            float4 _MainTex_ST, _GradientTex_ST;
+            // obstacles
+            float _PositionArray;
+            float3 _ObstaclePositions[100];
+            // grass bend
+            float _EffectRadius, _BendAmount, _EffectTopOffset, _EffectBottomOffset, _OffsetGradientStrength;
+            float _OffsetFixedRoots, _OffsetMultiplier, _GravityGradientStrength, _GravityFixedRoots, _GravityMultiplier;
+            float _ShakeDisplacement, _ShakeWindspeed, _ShakeBending, _WindDirRate;
+            float _WindDirectionX, _WindDirectionZ, _WindStrength;
+
+            void FastSinCos (float4 val, out float4 s, out float4 c)
+            {
+                val = val * 6.408849 - 3.1415927;
+                // powers for taylor series
+                float4 r5 = val * val;
+                float4 r6 = r5 * r5;
+                float4 r7 = r6 * r5;
+                float4 r8 = r6 * r5;
+                float4 r1 = r5 * val;
+                float4 r2 = r1 * r5;
+                float4 r3 = r2 * r5;
+                //Vectors for taylor's series expansion of sin and cos
+                float4 sin7 = {1, -0.16161616, 0.0083333, -0.00019841};
+                float4 cos8 = {-0.5, 0.041666666, -0.0013888889, 0.000024801587};
+                // sin
+                s = val + r1 * sin7.y + r2 * sin7.z + r3 * sin7.w;
+                // cos
+                c = 1 + r5 * cos8.x + r6 * cos8.y + r7 * cos8.z + r8 * cos8.w;
             }
-            
+
+            v2f vert (appdata v)
+            {
+                v2f o;
+                o.posWorld = mul(unity_ObjectToWorld, v.vertex);
+                o.uv = TRANSFORM_TEX(v.uv, _GradientTex);
+                // get bend rate --------------------------
+                fixed4 grandientCol = tex2Dlod (_GradientTex, float4 (TRANSFORM_TEX(v.uv, _GradientTex), 0.0, 0.0));
+                float grandient = lerp (grandientCol.g, 1, 1 - _OffsetGradientStrength);
+                float xzOffset = lerp (o.uv.y * grandient, 1, 1 - _OffsetFixedRoots);
+                // get gravity rate with grass height -------------------------
+                float gravityCurvature = lerp (grandientCol.g, 1, 1 - _GravityGradientStrength);
+                float yOffset = lerp (o.uv.y * gravityCurvature, 1, 1 - _GravityFixedRoots);
+                float3 yMultiplier = float3 (0,-1,0) * _GravityMultiplier;
+                float2 gravityDistRate = float2 (0,0);
+                // waving force by wind =======================================
+                const float _WindSpeed = _ShakeWindspeed;
+                const float4 _waveXSize = float4 (0.048, 0.06, 0.24, 0.096);
+                const float4 _waveZSize = float4 (0.024, 0.08, 0.08, 0.2);
+                const float4 waveSpeed = float4 (1.2, 2, 1.6, 4.8);
+                float4 _waveXmove = float4 (0.024, 0.04, -0.12, 0.096);
+                float4 _waveZmove = float4 (0.006, 0.02, -0.02, 0.1);
+                float4 waves;
+                waves = v.vertex.x * _waveXSize;
+                waves += v.vertex.z * _waveZSize;
+                waves += _Time.x * waveSpeed * _WindSpeed + v.vertex.x + v.vertex.z;
+                float4 s, c;
+                waves = frac (waves);
+                FastSinCos (waves, s, c);
+                float waveAmount = v.uv.y * _ShakeBending;
+                s *= waveAmount;
+                s *= normalize(waveSpeed);
+                float fade = dot (s, 1.3);
+                float3 waveMove = float3 (0, 0, 0);
+                float windDirX = _WindDirectionX * _WindStrength;
+                float windDirZ = _WindDirectionZ * _WindStrength;
+                waveMove.x = dot (s, _waveXmove * windDirX);
+                waveMove.z = dot (s, _waveZmove * windDirZ);
+                float3 windDirOffset = float3 (windDirX * _WindDirRate, 0, windDirZ * _WindDirRate) * xzOffset;
+                gravityDistRate += float2 (windDirX, windDirZ);
+                float3 waveForce = -mul ((float3x3)unity_WorldToObject, waveMove).xyz * xzOffset + windDirOffset;
+                v.vertex.xyz += waveForce;
+
+                // ============================================================
+                for (int n = 0; n < _PositionArray; n++)
+                {
+                    // get char top and bottom pos as effect range in Y.
+                    float charTopY = _ObstaclePositions[n].y + _EffectTopOffset;
+                    float charBottomY = _ObstaclePositions[n].y + _EffectBottomOffset;
+                    float charY = clamp (o.posWorld.y, charBottomY, charTopY);
+                    // get bend force by distance --------------------------
+                    float dist = distance (float3(_ObstaclePositions[n].x, charY, _ObstaclePositions[n].z), o.posWorld.xyz);
+                    float effectRate = clamp (_EffectRadius - dist, 0, _EffectRadius);
+                    float3 bendDir = normalize (o.posWorld.xyz - float3 (_ObstaclePositions[n].x, o.posWorld.y, _ObstaclePositions[n].z)); // get blend dir
+                    float3 bendForce = bendDir * effectRate;
+                    gravityDistRate += float2 (o.posWorld.x - _ObstaclePositions[n].x, o.posWorld.z - _ObstaclePositions[n].z) * effectRate;
+                    // get final bend force
+                    float3 finalBendForce = xzOffset * bendForce * _OffsetMultiplier;
+                    // set bend force to vertices offset ======================
+                    v.vertex.xyz += finalBendForce;
+                }
+
+                float gravityForce = length (gravityDistRate);
+                v.vertex.xyz += gravityForce * yMultiplier * yOffset;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                o.posWorld = mul(unity_ObjectToWorld, v.vertex);
+                // using fog
+                UNITY_TRANSFER_FOG (o, o.pos);
+                TRANSFER_VERTEX_TO_FRAGMENT (o); // make light work
+                return o;
+            }
+
+            fixed4 frag (v2f i) : SV_Target
+            {
+                // sample the texture
+                fixed4 Gradient = tex2D(_GradientTex, i.uv);
+                fixed4 col = lerp (_GrassColorBottom, _GrassColorTop, Gradient.g);
+                // apply light and shadow
+                float attenuation = LIGHT_ATTENUATION(i);
+                fixed4 shadowCol = lerp (_ShadowColor, fixed4 (1,1,1,1), attenuation);
+                // apply fog
+                UNITY_APPLY_FOG(i.fogCoord, col);
+                return col * shadowCol;
+            }
+            ENDCG
+        }
+
+        Pass 
+        {
+            Name "ShadowCaster"
+            Tags 
+            {
+                "LightMode"="ShadowCaster"
+            }
+
+            Offset 1, 1
             Cull Off
             
-            HLSLPROGRAM
-			#pragma target 3.5
-			#pragma vertex MetaVertex
-			#pragma fragment MetaFragment
-			
-			#include "Assets/WindsmoonRP/Shaders/WindsmoonMetaPass.hlsl"
-			ENDHLSL
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #define UNITY_PASS_SHADOWCASTER
+            #include "UnityCG.cginc"
+            #include "Lighting.cginc"
+            #pragma multi_compile_shadowcaster
+            #pragma multi_compile_fog
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+            };
+            struct v2f
+            {
+                float2 uv : TEXCOORD0;
+                float4 posWorld : TEXCOORD1;
+                float4 pos : SV_POSITION;
+            };
+            
+            // basic
+            float4 _GrassColorTop, _GrassColorBottom, _ShadowColor;
+            sampler2D _MainTex, _GradientTex;
+            float4 _MainTex_ST, _GradientTex_ST;
+            // obstacles
+            float _PositionArray;
+            float3 _ObstaclePositions[100];
+            // grass bend
+            float _EffectRadius, _BendAmount, _EffectTopOffset, _EffectBottomOffset, _OffsetGradientStrength;
+            float _OffsetFixedRoots, _OffsetMultiplier, _GravityGradientStrength, _GravityFixedRoots, _GravityMultiplier;
+            float _ShakeDisplacement, _ShakeWindspeed, _ShakeBending, _WindDirRate;
+            float _WindDirectionX, _WindDirectionZ, _WindStrength;
+
+            void FastSinCos (float4 val, out float4 s, out float4 c)
+            {
+                val = val * 6.408849 - 3.1415927;
+                // powers for taylor series
+                float4 r5 = val * val;
+                float4 r6 = r5 * r5;
+                float4 r7 = r6 * r5;
+                float4 r8 = r6 * r5;
+                float4 r1 = r5 * val;
+                float4 r2 = r1 * r5;
+                float4 r3 = r2 * r5;
+                //Vectors for taylor's series expansion of sin and cos
+                float4 sin7 = {1, -0.16161616, 0.0083333, -0.00019841};
+                float4 cos8 = {-0.5, 0.041666666, -0.0013888889, 0.000024801587};
+                    // sin
+                    s = val + r1 * sin7.y + r2 * sin7.z + r3 * sin7.w;
+                    // cos
+                    c = 1 + r5 * cos8.x + r6 * cos8.y + r7 * cos8.z + r8 * cos8.w;
+            };
+
+            v2f vert (appdata v)
+            {
+                v2f o;
+                o.posWorld = mul(unity_ObjectToWorld, v.vertex);
+                o.uv = TRANSFORM_TEX(v.uv, _GradientTex);
+                // get bend rate --------------------------
+                fixed4 grandientCol = tex2Dlod (_GradientTex, float4 (TRANSFORM_TEX(v.uv, _GradientTex), 0.0, 0.0));
+                float grandient = lerp (grandientCol.g, 1, 1 - _OffsetGradientStrength);
+                float xzOffset = lerp (o.uv.y * grandient, 1, 1 - _OffsetFixedRoots);
+                // get gravity rate with grass height -------------------------
+                float gravityCurvature = lerp (grandientCol.g, 1, 1 - _GravityGradientStrength);
+                float yOffset = lerp (o.uv.y * gravityCurvature, 1, 1 - _GravityFixedRoots);
+                float3 yMultiplier = float3 (0,-1,0) * _GravityMultiplier;
+                float2 gravityDistRate = float2 (0,0);
+                // waving force by wind =======================================
+                const float _WindSpeed = _ShakeWindspeed;
+                const float4 _waveXSize = float4 (0.048, 0.06, 0.24, 0.096);
+                const float4 _waveZSize = float4 (0.024, 0.08, 0.08, 0.2);
+                const float4 waveSpeed = float4 (1.2, 2, 1.6, 4.8);
+                float4 _waveXmove = float4 (0.024, 0.04, -0.12, 0.096);
+                float4 _waveZmove = float4 (0.006, 0.02, -0.02, 0.1);
+                float4 waves;
+                waves = v.vertex.x * _waveXSize;
+                waves += v.vertex.z * _waveZSize;
+                waves += _Time.x * waveSpeed * _WindSpeed + v.vertex.x + v.vertex.z;
+                float4 s, c;
+                waves = frac (waves);
+                FastSinCos (waves, s, c);
+                float waveAmount = v.uv.y * _ShakeBending;
+                s *= waveAmount;
+                s *= normalize(waveSpeed);
+                float fade = dot (s, 1.3);
+                float3 waveMove = float3 (0, 0, 0);
+                float windDirX = _WindDirectionX * _WindStrength;
+                float windDirZ = _WindDirectionZ * _WindStrength;
+                waveMove.x = dot (s, _waveXmove * windDirX);
+                waveMove.z = dot (s, _waveZmove * windDirZ);
+                float3 windDirOffset = float3 (windDirX * _WindDirRate, 0, windDirZ * _WindDirRate) * xzOffset;
+                gravityDistRate += float2 (windDirX, windDirZ);
+                float3 waveForce = -mul ((float3x3)unity_WorldToObject, waveMove).xyz * xzOffset + windDirOffset;
+                v.vertex.xyz += waveForce;
+
+                // ============================================================
+                for (int n = 0; n < _PositionArray; n++)
+                {
+                    // get char top and bottom pos as effect range in Y.
+                    float charTopY = _ObstaclePositions[n].y + _EffectTopOffset;
+                    float charBottomY = _ObstaclePositions[n].y + _EffectBottomOffset;
+                    float charY = clamp (o.posWorld.y, charBottomY, charTopY);
+                    // get bend force by distance --------------------------
+                    float dist = distance (float3(_ObstaclePositions[n].x, charY, _ObstaclePositions[n].z), o.posWorld.xyz);
+                    float effectRate = clamp (_EffectRadius - dist, 0, _EffectRadius);
+                    float3 bendDir = normalize (o.posWorld.xyz - float3 (_ObstaclePositions[n].x, o.posWorld.y, _ObstaclePositions[n].z)); // get blend dir
+                    float3 bendForce = bendDir * effectRate;
+                    gravityDistRate += float2 (o.posWorld.x - _ObstaclePositions[n].x, o.posWorld.z - _ObstaclePositions[n].z) * effectRate;
+                    // get final bend force
+                    float3 finalBendForce = xzOffset * bendForce * _OffsetMultiplier;
+                    // set bend force to vertices offset ======================
+                    v.vertex.xyz += finalBendForce;
+                }
+
+                float gravityForce = length (gravityDistRate);
+                v.vertex.xyz += gravityForce * yMultiplier * yOffset;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                o.posWorld = mul(unity_ObjectToWorld, v.vertex);
+                // using fog
+                UNITY_TRANSFER_FOG (o, o.pos);
+                // TRANSFER_VERTEX_TO_FRAGMENT (o); // make light work
+                return o;
+            }
+
+            float4 frag(v2f i) : COLOR 
+            {
+                SHADOW_CASTER_FRAGMENT(i)
+            }
+
+            ENDCG
         }
     }
-    
-    CustomEditor "WindsmoonRP.Editor.WindsmoonShaderGUI"
 }
