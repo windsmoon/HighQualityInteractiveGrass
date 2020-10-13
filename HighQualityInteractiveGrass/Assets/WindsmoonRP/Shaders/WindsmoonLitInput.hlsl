@@ -25,7 +25,7 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
     UNITY_DEFINE_INSTANCED_PROP(float, _DetailSmoothness)
     UNITY_DEFINE_INSTANCED_PROP(float, _NormalScale)
     UNITY_DEFINE_INSTANCED_PROP(float, _DetailNormalScale)
-    UNITY_DEFINE_INSTANCED_PROP(float4, _WindEffect)
+    // UNITY_DEFINE_INSTANCED_PROP(float4, _WindEffect)
     UNITY_DEFINE_INSTANCED_PROP(float, _MaxGrassOffsetScale)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
@@ -164,10 +164,10 @@ float3 GetEmission(InputConfig config)
     return emissionMap.rgb * emissionColor.rgb;
 }
 
-float4 GetWindEffect()
-{
-    return INPUT_PROP(_WindEffect);
-}
+// float4 GetWindEffect()
+// {
+//     return INPUT_PROP(_WindEffect);
+// }
 
 float GetMaxGrassOffsetScale()
 {
