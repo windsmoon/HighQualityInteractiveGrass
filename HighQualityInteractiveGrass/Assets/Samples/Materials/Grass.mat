@@ -95,7 +95,7 @@ Material:
     - _GlossyReflections: 1
     - _Grass: 1
     - _MaskMapToggle: 0
-    - _MaxGrassOffsetScale: 0.46
+    - _MaxGrassOffsetScale: 0.558
     - _MaxWindEffect: 0.281
     - _Metallic: 0
     - _Mode: 0

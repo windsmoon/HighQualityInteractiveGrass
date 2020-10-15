@@ -93,6 +93,8 @@ Varyings LitVertex(Attribute input)
 
 float4 LitFragment(Varyings input) : SV_Target
 {
+	// float4 nosie = SAMPLE_TEXTURE2D(_WindNoise, sampler_WindNoise, input.baseUV + _uvOffset);
+	// return nosie;
     UNITY_SETUP_INSTANCE_ID(input);
 
 	ClipForLOD(input.positionCS.xy, unity_LODFade.x);
