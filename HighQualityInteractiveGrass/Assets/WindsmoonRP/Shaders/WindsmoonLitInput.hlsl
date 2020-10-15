@@ -11,6 +11,9 @@ TEXTURE2D(_DetailMap);
 TEXTURE2D(_DetailNormalMap);
 SAMPLER(sampler_DetailMap);
 
+TEXTURE2D(_WindNoise);
+SAMPLER(sampler_WindNoise);
+
 UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
     UNITY_DEFINE_INSTANCED_PROP(float4, _BaseMap_ST)
     UNITY_DEFINE_INSTANCED_PROP(float4, _DetailMap_ST)
@@ -27,6 +30,7 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
     UNITY_DEFINE_INSTANCED_PROP(float, _DetailNormalScale)
     // UNITY_DEFINE_INSTANCED_PROP(float4, _WindEffect)
     UNITY_DEFINE_INSTANCED_PROP(float, _MaxGrassOffsetScale)
+    UNITY_DEFINE_INSTANCED_PROP(float4, _WindNoise_TexelSize)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
 #define INPUT_PROP(name) UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, name)

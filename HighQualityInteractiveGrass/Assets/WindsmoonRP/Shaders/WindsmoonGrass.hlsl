@@ -4,8 +4,9 @@
 #define MAX_INTERACTIVE_OBJECT_COUNT 16
 // #define MAX_OTHER_LIGHT_COUNT 64
 
-TEXTURE2D(_WindNoise);
-SAMPLER(sampler_WindNoise);
+// UNITY_INSTANCING_BUFFER_START(UnityPerMaterial1)
+//     UNITY_DEFINE_INSTANCED_PROP(float4, _WindNoise_TexelSize)
+// UNITY_INSTANCING_BUFFER_END(UnityPerMaterial1)
 
 CBUFFER_START(GrassInfo)
     int _InteracitveObjectsCount;
@@ -43,7 +44,10 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
     // float timeScale = 0.5f * sin(_Time.y * windEffect.w + posWS.x) + 0.5f;
     // float3 offset = windDirection * min(windEffect.w, maxOffset) * factor.r * timeScale; // windEffect.w affect the max offset by wind
     float2 windUV = GetWindUV(posWS);
-    float4 windEffect = GetDisturbedWind( windUV + frac(0.1 * _Time.y));
+    windUV = windUV + frac(_WindNoise_TexelSize.xy * 3000 * (1.0f / 60.0f) * _Time.y);
+    float4 windEffect = GetDisturbedWind(windUV);
+    // float4 windEffect = GetDisturbedWind( windUV + frac(0.1 * _Time.y));
+
     float3 windDirection = windEffect.xyz;
     windDirection.y = 0; // to do
     // float timeScale = 0.5f * sin(_Time.y * windEffect.w + posWS.x) + 0.5f;
