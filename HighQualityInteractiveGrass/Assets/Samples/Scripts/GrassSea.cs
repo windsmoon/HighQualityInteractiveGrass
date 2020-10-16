@@ -32,7 +32,7 @@ public class GrassSea : MonoBehaviour
     private void Update()
     {
         Vector2 windDirectionXZ = new Vector2(uniformWindDirection.x, uniformWindDirection.z).normalized;
-        uvOffset += windDirectionXZ * windSpeed * Time.deltaTime;
+        uvOffset -= windDirectionXZ * windSpeed * Time.deltaTime;
         uvOffset = new Vector2(uvOffset.x - Mathf.Floor(uvOffset.x), uvOffset.y - Mathf.Floor(uvOffset.y));
         Vector3 windDirection = new Vector4(uniformWindDirection.x, 0, uniformWindDirection.z).normalized;
         Shader.SetGlobalTexture("_WindNoise", windNoise);
