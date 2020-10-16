@@ -14,6 +14,7 @@ CBUFFER_START(GrassInfo)
     float4 _UniformWindEffect;
     float4 _worldRect;
     float4 _uvOffset;
+    float _Stability;
 CBUFFER_END
 
 // float4 GetDisturbedWind(float2 uv)
@@ -51,7 +52,7 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
     // windUV = windUV + frac(0.1 * _Time.y);
     windUV += _uvOffset;
     float4 windNoise = SAMPLE_TEXTURE2D_LOD(_WindNoise, sampler_WindNoise, windUV, 0);
-    float3 offset = normalize(saturate(windNoise.rgb) * _UniformWindEffect.xyz) * min(_UniformWindEffect.w * windNoise.a * 2, maxOffset) * factor.r;
+    float3 offset = normalize(saturate(windNoise.rgb + _Stability) * _UniformWindEffect.xyz) * min(_UniformWindEffect.w * windNoise.a * 2, maxOffset) * factor.r;
     
     // float4 windEffect = GetDisturbedWind(windUV);
 

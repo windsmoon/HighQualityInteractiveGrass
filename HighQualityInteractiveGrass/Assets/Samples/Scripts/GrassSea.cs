@@ -16,6 +16,8 @@ public class GrassSea : MonoBehaviour
     private Rect worldRect;
     [SerializeField, Range(0, 1)]
     private float windSpeed = 0.1f;
+    [SerializeField, Range(0, 1)]
+    private float stablility = 0;
     private Vector2 uvOffset = new Vector2(0, 0);
     #endregion
 
@@ -30,6 +32,7 @@ public class GrassSea : MonoBehaviour
         Shader.SetGlobalVector("_UniformWindEffect", new Vector4(windDirection.x, windDirection.y, windDirection.z, uniformWindStrength));
         Shader.SetGlobalVector("_worldRect", new Vector4(worldRect.x, worldRect.y, worldRect.width, worldRect.height));
         Shader.SetGlobalVector("_uvOffset", uvOffset);
+        Shader.SetGlobalFloat("_Stability", stablility);
     }
     #endregion
 }
