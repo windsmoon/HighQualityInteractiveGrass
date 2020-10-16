@@ -14,7 +14,7 @@ public class GrassSea : MonoBehaviour
     private float uniformWindStrength;
     [SerializeField]    
     private Rect worldRect;
-    [SerializeField, Range(0, 1)]
+    [SerializeField, Range(0, 0.3f)]
     private float windSpeed = 0.1f;
     [SerializeField, Range(0, 1)]
     private float stablility = 0;
@@ -22,6 +22,13 @@ public class GrassSea : MonoBehaviour
     #endregion
 
     #region unity methods
+
+    private void OnValidate()
+    {
+        uniformWindDirection.y = 0;
+        uniformWindDirection = uniformWindDirection.normalized;
+    }
+
     private void Update()
     {
         Vector2 windDirectionXZ = new Vector2(uniformWindDirection.x, uniformWindDirection.z).normalized;
