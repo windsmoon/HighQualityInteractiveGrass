@@ -11,10 +11,10 @@ public class GrassSea : MonoBehaviour
     [SerializeField]
     private Vector3 uniformWindDirection;
     [SerializeField, Range(0, 1)]
-    private float uniformWindStrength;
+    private float uniformWindForce;
     [SerializeField]    
     private Rect worldRect;
-    [SerializeField, Range(0, 0.3f)]
+    [SerializeField, Range(0, 1f)]
     private float windSpeed = 0.1f;
     [SerializeField, Range(0, 1)]
     private float stablility = 0;
@@ -25,18 +25,18 @@ public class GrassSea : MonoBehaviour
 
     private void OnValidate()
     {
-        uniformWindDirection.y = 0;
-        uniformWindDirection = uniformWindDirection.normalized;
+        // uniformWindDirection.y = 0;
+        // uniformWindDirection = uniformWindDirection.normalized;
     }
 
     private void Update()
     {
         Vector2 windDirectionXZ = new Vector2(uniformWindDirection.x, uniformWindDirection.z).normalized;
-        uvOffset -= windDirectionXZ * windSpeed * Time.deltaTime;
+        uvOffset -= windDirectionXZ * windSpeed * 0.3f * Time.deltaTime;
         uvOffset = new Vector2(uvOffset.x - Mathf.Floor(uvOffset.x), uvOffset.y - Mathf.Floor(uvOffset.y));
         Vector3 windDirection = new Vector4(uniformWindDirection.x, 0, uniformWindDirection.z).normalized;
         Shader.SetGlobalTexture("_WindNoise", windNoise);
-        Shader.SetGlobalVector("_UniformWindEffect", new Vector4(windDirection.x, windDirection.y, windDirection.z, uniformWindStrength));
+        Shader.SetGlobalVector("_UniformWindEffect", new Vector4(windDirection.x, windDirection.y, windDirection.z, uniformWindForce));
         Shader.SetGlobalVector("_worldRect", new Vector4(worldRect.x, worldRect.y, worldRect.width, worldRect.height));
         Shader.SetGlobalVector("_uvOffset", uvOffset);
         Shader.SetGlobalFloat("_Stability", stablility);

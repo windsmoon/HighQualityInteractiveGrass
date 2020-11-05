@@ -17,17 +17,6 @@ CBUFFER_START(GrassInfo)
     float _Stability;
 CBUFFER_END
 
-// float4 GetDisturbedWind(float2 uv)
-// {
-//     float3 windDir = _UniformWindEffect.xyz;
-//     windDir *= windNoise.rgb;
-//     windDir.y = 0;
-//     windDir = normalize(windDir);
-//     float windStrength = _UniformWindEffect.w;
-//     windStrength *= windNoise.a * 2;
-//     return float4(windDir, windStrength);
-// }
-
 float2 GetWindUV(float3 posWS)
 {
     return float2((posWS.xz - _worldRect.xy) / _worldRect.zw);
@@ -37,45 +26,28 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
 {
     float random01 = Random01(posWS); // posWS is near ??
     float maxOffsetScale = GetMaxGrassOffsetScale();
-    float maxOffset = posOS.y * maxOffsetScale;
-    float maxInteracitveOffset = min(maxOffset * 2, 1);
-    
-    // wind effect
-    // float4 windEffect = GetWindEffect();
-    // float windDirection = normalize(windEffect.xyz);
-    // float timeScale = 0.5f * sin(_Time.y * windEffect.w + posWS.x) + 0.5f;
-    // float3 offset = windDirection * min(windEffect.w, maxOffset) * factor.r * timeScale; // windEffect.w affect the max offset by wind
+    float maxOffset = posOS.y * maxOffsetScale; // todo : set grass height
+
+    // caculate nosie uv and sample the noise
     float2 windUV = GetWindUV(posWS);
-    
-    // windUV = windUV + frac(_WindNoise_TexelSize.xy * 3000 * (1.0f / 60.0f) * _Time.y);
-    // windUV = windUV + frac(_WindNoise_TexelSize.xy * 3000 * (1.0f / 60.0f) * _Time.y);
-    // windUV = windUV + frac(0.1 * _Time.y);
-    windUV += _uvOffset;
+    windUV = windUV + _uvOffset;
     float4 windNoise = SAMPLE_TEXTURE2D_LOD(_WindNoise, sampler_WindNoise, windUV, 0);
-    float radNoise = 3.1415926 / 2 * (windNoise.r * 2 - 1);
-    radNoise = lerp(radNoise, 0, _Stability);
-    float sinNoise = sin(radNoise);
-    float cosNoise = cos(radNoise);
-    float2x2 nosieMatrix = {cosNoise, sinNoise, -sinNoise, cosNoise};
-    float2 windDirection = mul(nosieMatrix, _UniformWindEffect.xz);
-    float3 resultWindirection = float3(windDirection.x, 1, windDirection.y);
-    // float3 offset = normalize(saturate(windNoise.rgb) * _UniformWindEffect.xyz) * min(_UniformWindEffect.w * windNoise.a * 2, maxOffset) * factor.r;
-    float3 offset = resultWindirection * min(_UniformWindEffect.w, maxOffset) * factor.r * factor.r;
 
+    // rotate wind direction by nosie
+    float radNoiseRotate = (windNoise.r * 2 - 1) * 3.1415926 / 4;
+    radNoiseRotate = lerp(radNoiseRotate, 0, _Stability);
+    float sinNoise = sin(radNoiseRotate);
+    float cosNoise = cos(radNoiseRotate);
+    float2x2 nosieMatrix = {cosNoise, -sinNoise, sinNoise, cosNoise};
+    float3 windDirection;
+    windDirection.y = 0;
+    windDirection.xz = mul(nosieMatrix, _UniformWindEffect.xz);
+    // float3 resultWindirection = float3(windDirection.x, 0, windDirection.y);
 
+    float3 offset = windDirection * min(_UniformWindEffect.w * windNoise.a, maxOffset) * factor.r * factor.r;
 
-    
-    // float4 windEffect = GetDisturbedWind(windUV);
+    float maxInteracitveOffset = min(maxOffset * 2, 1);
 
-    // float4 windEffect = GetDisturbedWind( windUV + frac(0.1 * _Time.y));
-
-    // float3 windDirection = windEffect.xyz;
-    // windDirection.y = 0; // to do
-    // float timeScale = 0.5f * sin(_Time.y * windEffect.w + posWS.x) + 0.5f;
-    // float3 offset = windDirection * min(windEffect.w, maxOffset) * factor.r; // windEffect.w affect the max offset by wind
-
-    
-    // interactive objects effect
     for (int i = 0; i < _InteracitveObjectsCount; ++i)
     {
         float4 interactiveObject = _InteractiveObjects[i];
