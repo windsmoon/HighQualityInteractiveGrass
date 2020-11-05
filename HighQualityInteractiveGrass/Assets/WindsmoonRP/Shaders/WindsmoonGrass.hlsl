@@ -24,9 +24,12 @@ float2 GetWindUV(float3 posWS)
 
 void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
 {
-    float random01 = Random01(posWS); // posWS is near ??
+    float random01 = Random01(posWS.xz); // posWS is near ??
     float maxOffsetScale = GetMaxGrassOffsetScale();
-    float maxOffset = posOS.y * maxOffsetScale; // todo : set grass height
+    float3 rootPosWS = TransformObjectToWorld(float3(0, 0, 0));
+    float originalLenght = length(posWS - rootPosWS);
+
+    float maxOffset = originalLenght * maxOffsetScale; // todo : set grass height
 
     // caculate nosie uv and sample the noise
     float2 windUV = GetWindUV(posWS);
@@ -34,6 +37,7 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
     float4 windNoise = SAMPLE_TEXTURE2D_LOD(_WindNoise, sampler_WindNoise, windUV, 0);
 
     // rotate wind direction by nosie
+    // todo : the sin and cos can be removed by some other method
     float radNoiseRotate = (windNoise.r * 2 - 1) * 3.1415926 / 4;
     radNoiseRotate = lerp(radNoiseRotate, 0, _Stability);
     float sinNoise = sin(radNoiseRotate);
@@ -61,12 +65,20 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
     }
     
     // caculate y offset
-    float squaredXZOffset = Square(offset.x) + Square(offset.z);
-    squaredXZOffset *= random01;
-    float squareSlopeLenght = squaredXZOffset + Square(posOS.y);
-    float scale = posOS.y / (sqrt(squareSlopeLenght) + 0.00001f);
-    offset.y = -(posOS.y - posOS.y * scale);
-    posWS += offset;
+    // todo : allow smoe strech
+    float3 newPosWS = posWS + offset;
+    float3 newVertexVector = newPosWS - rootPosWS;
+    float newLength = length(newVertexVector);
+    float lengthScale = originalLenght / newLength;
+    posWS = rootPosWS + newVertexVector * lengthScale;
+    // posWS = newPosWS;
+
+    // float squaredXZOffset = Square(offset.x) + Square(offset.z);
+    // squaredXZOffset *= random01;
+    // float squareSlopeLenght = squaredXZOffset + Square(posOS.y);
+    // float scale = posOS.y / (sqrt(squareSlopeLenght) + 0.00001f);
+    // offset.y = -(posOS.y - posOS.y * scale);
+    // posWS += offset;
 }
 
 #endif

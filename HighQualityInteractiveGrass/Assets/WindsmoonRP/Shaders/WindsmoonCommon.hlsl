@@ -73,4 +73,9 @@ half Random01(float3 number)
     return frac(sin(dot(number.xyz ,float3(12.9898,78.233,45.5432))) * 43758.5453);
 }
 
+half Random01(float2 number)
+{
+    return frac(sin(dot(number.xy ,float2(12.9898,78.233))) * 43758.5453);
+}
+
 #endif
