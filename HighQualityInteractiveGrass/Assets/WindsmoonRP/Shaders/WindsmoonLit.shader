@@ -31,6 +31,7 @@
 		[Toggle(RECEIVE_SHADOWS)] _ReceiveShadows ("Receive Shadows", Float) = 1
     	[Toggle(GRASS)] _Grass ("Grass", Float) = 0
     	_MaxGrassOffsetScale("Max Grass Offset Scale (decide the max offset)", Range(0, 1)) = 0.3
+    	_StretchScale("Stretch Scale", Range(0, 1)) = 0.2
 		[HideInInspector] _MainTex("Texture for Lightmap", 2D) = "white" {}
 		[HideInInspector] _Color("Color for Lightmap", Color) = (0.5, 0.5, 0.5, 1.0)
     }

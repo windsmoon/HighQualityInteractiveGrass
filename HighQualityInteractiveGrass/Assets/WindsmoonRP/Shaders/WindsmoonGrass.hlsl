@@ -69,7 +69,7 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
     float3 newPosWS = posWS + offset;
     float3 newVertexVector = newPosWS - rootPosWS;
     float newLength = length(newVertexVector);
-    float lengthScale = originalLenght / newLength;
+    float lengthScale = (1 + GetStretchScale()) * originalLenght / newLength;
     posWS = rootPosWS + newVertexVector * lengthScale;
     // posWS = newPosWS;
 

@@ -29,6 +29,7 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
     UNITY_DEFINE_INSTANCED_PROP(float, _NormalScale)
     UNITY_DEFINE_INSTANCED_PROP(float, _DetailNormalScale)
     UNITY_DEFINE_INSTANCED_PROP(float, _MaxGrassOffsetScale)
+    UNITY_DEFINE_INSTANCED_PROP(float, _StretchScale)
     UNITY_DEFINE_INSTANCED_PROP(float4, _WindNoise_TexelSize)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
@@ -170,6 +171,11 @@ float3 GetEmission(InputConfig config)
 float GetMaxGrassOffsetScale()
 {
     return INPUT_PROP(_MaxGrassOffsetScale);
+}
+
+float GetStretchScale()
+{
+    return INPUT_PROP(_StretchScale);
 }
 
 #endif
