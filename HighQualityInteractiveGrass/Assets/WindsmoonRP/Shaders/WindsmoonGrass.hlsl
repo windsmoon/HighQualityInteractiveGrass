@@ -27,9 +27,9 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
     float random01 = Random01(posWS.xz); // posWS is near ??
     float maxOffsetScale = GetMaxGrassOffsetScale();
     float3 rootPosWS = TransformObjectToWorld(float3(0, 0, 0));
-    float originalLenght = length(posWS - rootPosWS);
+    float originalLength = length(posWS - rootPosWS);
 
-    float maxOffset = originalLenght * maxOffsetScale; // todo : set grass height
+    float maxOffset = originalLength * maxOffsetScale; // todo : set grass height
 
     // caculate nosie uv and sample the noise
     float2 windUV = GetWindUV(posWS);
@@ -46,9 +46,9 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
     float3 windDirection;
     windDirection.y = 0;
     windDirection.xz = mul(nosieMatrix, _UniformWindEffect.xz);
-    // float3 resultWindirection = float3(windDirection.x, 0, windDirection.y);
 
-    float3 offset = windDirection * min(_UniformWindEffect.w * windNoise.a, maxOffset) * factor.r * factor.r;
+    float noiseWindForce = windNoise.a * 2;
+    float3 offset = windDirection * min(_UniformWindEffect.w * noiseWindForce, maxOffset) * factor.r * factor.r;
 
     float maxInteracitveOffset = min(maxOffset * 2, 1);
 
@@ -66,11 +66,16 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
     
     // caculate y offset
     // todo : allow smoe strech
+    float stretchScale = 1 + GetStretchScale();
     float3 newPosWS = posWS + offset;
     float3 newVertexVector = newPosWS - rootPosWS;
     float newLength = length(newVertexVector);
-    float lengthScale = (1 + GetStretchScale()) * originalLenght / newLength;
-    posWS = rootPosWS + newVertexVector * lengthScale;
+    float lengthScale = newLength / originalLength;
+    lengthScale = min(stretchScale, lengthScale);
+    //lengthScale = 1 / lengthScale;
+    
+    // float lengthScale = stretchScale * originalLenght / newLength;
+    posWS = rootPosWS + lengthScale * newVertexVector * originalLength / newLength;
     // posWS = newPosWS;
 
     // float squaredXZOffset = Square(offset.x) + Square(offset.z);
