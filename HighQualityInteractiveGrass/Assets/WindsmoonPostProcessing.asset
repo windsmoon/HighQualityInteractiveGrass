@@ -23,5 +23,18 @@ MonoBehaviour:
     FadeFireflies: 1
     mode: 1
     Scatter: 0.7
+  colorGradingSettings:
+    PostExposure: 0
+    Contrast: 0
+    ColorFilter: {r: 1, g: 1, b: 1, a: 1}
+    HueShift: 0
+    Saturation: 0
+  whiteBalanceSettings:
+    Temperature: 0
+    Tint: 0
+  splitToningSettings:
+    ShadowColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    HighLightColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    Balance: 0
   toneMappingSettings:
     Mode: 0

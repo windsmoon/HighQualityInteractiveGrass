@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.ParticleSystemJobs;
 using UnityEngine.Rendering;
+using static WindsmoonRP.PostProcessing.PostProcessingAsset;
 
 namespace WindsmoonRP.PostProcessing
 {
@@ -69,13 +70,13 @@ namespace WindsmoonRP.PostProcessing
             // Draw(sourceID, BuiltinRenderTextureType.CameraTarget, PostProcessingPassEnum.Copy);
             if (DoBloom(sourceID))
             {
-                DoToneMapping(ShaderPropertyID.BloomResult);
+                DoColorGradingAndToneMapping(ShaderPropertyID.BloomResult);
                 commandBuffer.ReleaseTemporaryRT(ShaderPropertyID.BloomResult);
             }
 
             else
             {
-                DoToneMapping(sourceID);
+                DoColorGradingAndToneMapping(sourceID);
             }
             
             renderContext.ExecuteCommandBuffer(commandBuffer);
@@ -197,10 +198,48 @@ namespace WindsmoonRP.PostProcessing
             return true;
         }
 
+        private void DoColorGradingAndToneMapping(int sourceID)
+        {
+            ConfigureColorAdjustments();
+            ConfigureWhiteBalance();
+            ConfigureSplitToning();
+            DoToneMapping(sourceID);
+        }
+        
+        private void ConfigureColorAdjustments()
+        {
+            ColorGradingSettings colorGradingSettings = postProcessingAsset.ColorGradingSettings;
+            commandBuffer.SetGlobalVector(ShaderPropertyID.ColorAdjustmentsDataPropertyID, new Vector4(
+                Mathf.Pow(2f, colorGradingSettings.PostExposure),
+                colorGradingSettings.Contrast * 0.01f + 1f,
+                colorGradingSettings.HueShift * (1f / 360f),
+                colorGradingSettings.Saturation * 0.01f + 1f
+            ));
+            
+            commandBuffer.SetGlobalColor(ShaderPropertyID.ColorFilterPropertyID, colorGradingSettings.ColorFilter.linear);
+        }
+
+        private void ConfigureWhiteBalance()
+        {
+            // LMS : It describes colors as the responses of the three photoreceptor cone types in the human eye (from catlike)
+            // The tint can be used to compensate for undesired color balance, pushing the image toward either green or magenta (from catlike)
+            WhiteBalanceSettings whiteBalanceSettings = postProcessingAsset.WhiteBalanceSettings;
+            commandBuffer.SetGlobalVector(ShaderPropertyID.WhiteBalancePropertyID, ColorUtils.ColorBalanceToLMSCoeffs(whiteBalanceSettings.Temperature, whiteBalanceSettings.Tint));
+        }
+
+        private void ConfigureSplitToning()
+        {
+            SplitToningSettings splitToningSettings = postProcessingAsset.SplitToningSettings;
+            Color shadowColor = splitToningSettings.ShadowColor;
+            shadowColor.a = splitToningSettings.Balance * 0.01f;
+            commandBuffer.SetGlobalColor(ShaderPropertyID.SplitToningShadowColorPropertyID, shadowColor);
+            commandBuffer.SetGlobalColor(ShaderPropertyID.SplitToningHighLightColorPropertyID, splitToningSettings.HighLightColor);
+        }
+
         private void DoToneMapping(int sourceID)
         {
             ToneMappingSettings toneMappingSettings = postProcessingAsset.ToneMappingSettings;
-            PostProcessingPass pass = toneMappingSettings.Mode < 0 ? PostProcessingPass.Copy : PostProcessingPass.ToneMappingACES + (int)toneMappingSettings.Mode;
+            PostProcessingPass pass = PostProcessingPass.ToneMappingNone + (int)toneMappingSettings.Mode;
             Draw(sourceID, BuiltinRenderTextureType.CameraTarget, pass);
         }
         #endregion
