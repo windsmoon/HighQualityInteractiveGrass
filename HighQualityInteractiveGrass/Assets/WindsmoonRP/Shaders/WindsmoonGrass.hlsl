@@ -48,7 +48,10 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
     windDirection.xz = mul(nosieMatrix, _UniformWindEffect.xz);
 
     float noiseWindForce = windNoise.a * 2;
-    float3 offset = windDirection * min(_UniformWindEffect.w * noiseWindForce, maxOffset) * factor.r * factor.r;
+    // float windOffset = min(_UniformWindEffect.w * noiseWindForce, maxOffset) * factor.r * factor.r;
+    float windOffsetLength = _UniformWindEffect.w * noiseWindForce * factor.r * factor.r;
+    // float3 offset = windDirection * min(_UniformWindEffect.w * noiseWindForce, maxOffset) * factor.r * factor.r;
+    float3 offset = windDirection * windOffsetLength;
 
     float maxInteracitveOffset = min(maxOffset * 2, 1);
 
@@ -56,13 +59,23 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
     {
         float4 interactiveObject = _InteractiveObjects[i];
         float3 interactiveObjectPosWS = interactiveObject.xyz;
+        float3 interactiveOffsetDirection = rootPosWS - interactiveObjectPosWS + float3(0.00001, 0, 0.00001);
+        interactiveOffsetDirection.y = 0;
+        interactiveOffsetDirection = normalize(interactiveOffsetDirection);
         float3 interactiveOffset = posWS - interactiveObjectPosWS;
-        float3 interactiveDir = normalize(interactiveOffset);
+        // float3 interactiveDir = normalize(interactiveOffset);
         float squaredInteractiveXZLength = Square(interactiveOffset.x) + Square(interactiveOffset.z);
-        float squaredInteractiveXZLengthScale = clamp(squaredInteractiveXZLength / 1, 0, 1); // todo ： add object area
-    
-        offset.xz += lerp(maxInteracitveOffset * interactiveDir.xz, float2(0, 0), squaredInteractiveXZLengthScale);
+        float squaredInteractiveXZLengthScale = clamp(squaredInteractiveXZLength / 0.8, 0, 1); // todo ： add object area
+
+        float interactiveOffsetLength = lerp(maxInteracitveOffset * 0.5, 0, squaredInteractiveXZLengthScale);
+        // interactiveOffset = lerp(maxInteracitveOffset * interactiveOffsetDirection.xz, float2(0, 0), squaredInteractiveXZLengthScale);
+        interactiveOffset = interactiveOffsetDirection * interactiveOffsetLength;
+        offset += interactiveOffset;
     }
+
+    offset = clamp(offset, -maxOffset.xxx, maxOffset.xxx);
+
+
     
     // caculate y offset
     // todo : allow smoe strech
