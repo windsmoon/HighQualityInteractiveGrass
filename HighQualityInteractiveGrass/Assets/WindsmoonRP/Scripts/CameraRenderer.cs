@@ -1,5 +1,4 @@
 ﻿using System.Net.Configuration;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Rendering;
@@ -154,7 +153,7 @@ namespace WindsmoonRP
             renderContext.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);
         }
 
-        #if UNITY_EDITOR || DEBUG
+        #if UNITY_EDITOR
         private void DrawSceneView()
         {
             if (camera.cameraType != CameraType.SceneView)
@@ -188,7 +187,7 @@ namespace WindsmoonRP
 
         private void DrawGizmos(bool isBeforePostProcessing) // ?? nothing happened, do not call this methods also has gizmos
         {
-            if (Handles.ShouldRenderGizmos() == false)
+            if (UnityEditor.Handles.ShouldRenderGizmos() == false)
             {
                 return;
             }
