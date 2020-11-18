@@ -1,5 +1,4 @@
-﻿using System.Net.Configuration;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Rendering;
 using WindsmoonRP.PostProcessing;
