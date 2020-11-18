@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 public class Generator : UnityEditor.Editor
 {
     #region contants
-    private const float radius = 2f;
+    private const float radius = 1f;
     private const float minScale = 0.6f;
     private const float maxScale = 1.4f;
     #endregion

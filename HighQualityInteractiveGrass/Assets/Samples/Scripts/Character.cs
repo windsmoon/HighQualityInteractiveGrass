@@ -36,7 +36,8 @@ namespace Windsmoon.HightQualityInteractiveGrass.Samples
                 translation.x = speed * Time.deltaTime;
             }
         
-            transform.Translate(translation, Space.Self);
+            transform.Translate(translation, Space.World);
+            Camera.main.transform.Translate(translation, Space.World);
             Vector4[] positions = new Vector4[] {transform.position};
             Shader.SetGlobalInt("_InteracitveObjectsCount", 1);
             Shader.SetGlobalVectorArray("_InteractiveObjects", positions);
