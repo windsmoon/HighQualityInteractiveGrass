@@ -56,21 +56,21 @@
             
             HLSLPROGRAM
             #pragma target 3.5 // for loops which are use a variable length
-            #pragma multi_compile _ ALPHA_CLIPPING
-            #pragma multi_compile _ PREMULTIPLY_ALPHA
-            #pragma multi_compile _ DIRECTIONAL_PCF3X3 DIRECTIONAL_PCF5X5 DIRECTIONAL_PCF7X7
-            #pragma multi_compile _ OTHER_PCF3X3 OTHER_PCF5X5 OTHER_PCF7X7
-            #pragma multi_compile _ CASCADE_BLEND_SOFT CASCADE_BLEND_DITHER
-            #pragma multi_compile _ SHADOW_MASK_ALWAYS SHADOW_MASK_DISTANCE
-            #pragma multi_compile _ RECEIVE_SHADOWS
-            #pragma multi_compile _ GRASS
-            #pragma multi_compile _ LIGHTMAP_ON
-            #pragma multi_compile _ LOD_FADE_CROSSFADE
-            #pragma multi_compile _ NORMAL_MAP
-            #pragma multi_compile _ MASK_MAP
-            #pragma multi_compile _ DETAIL_MAP
-            #pragma multi_compile _ LIGHTS_PER_OBJECT
-            #pragma multi_compile_instancing
+            #pragma shader_feature _ ALPHA_CLIPPING
+            #pragma shader_feature _ PREMULTIPLY_ALPHA
+            #pragma shader_feature _ DIRECTIONAL_PCF3X3 DIRECTIONAL_PCF5X5 DIRECTIONAL_PCF7X7
+            #pragma shader_feature _ OTHER_PCF3X3 OTHER_PCF5X5 OTHER_PCF7X7
+            #pragma shader_feature _ CASCADE_BLEND_SOFT CASCADE_BLEND_DITHER
+            #pragma shader_feature _ SHADOW_MASK_ALWAYS SHADOW_MASK_DISTANCE
+            #pragma shader_feature _ RECEIVE_SHADOWS
+            #pragma shader_feature _ GRASS
+            #pragma shader_feature _ LIGHTMAP_ON
+            #pragma shader_feature _ LOD_FADE_CROSSFADE
+            #pragma shader_feature _ NORMAL_MAP
+            #pragma shader_feature _ MASK_MAP
+            #pragma shader_feature _ DETAIL_MAP
+            #pragma shader_feature _ LIGHTS_PER_OBJECT
+            #pragma shader_feature_instancing
             #pragma vertex LitVertex
             #pragma fragment LitFragment
 
@@ -91,9 +91,9 @@
             HLSLPROGRAM
             #pragma target 3.5 // for loops which are use a variable length
 //            #pragma multi_compile _ ALPHA_CLIPPING
-            #pragma multi_compile _ _SHADOW_MODE_CLIP _SHADOW_MODE_DITHER
-            #pragma multi_compile _ LOD_FADE_CROSSFADE
-            #pragma multi_compile _ GRASS
+            #pragma shader_feature _ _SHADOW_MODE_CLIP _SHADOW_MODE_DITHER
+            #pragma shader_feature _ LOD_FADE_CROSSFADE
+            #pragma shader_feature _ GRASS
 
             #pragma multi_compile_instancing
 			#pragma vertex ShadowCasterVertex

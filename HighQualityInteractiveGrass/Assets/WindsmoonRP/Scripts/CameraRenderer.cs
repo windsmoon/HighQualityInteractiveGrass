@@ -47,7 +47,7 @@ namespace WindsmoonRP
             this.renderContext = renderContext;
             this.camera = camera;
             
-            #if UNITY_EDITOR || DEBUG
+            #if UNITY_EDITOR
             SetCommandBufferName();
             DrawSceneView(); // draw it before culling or it may be culled
             #endif
@@ -66,7 +66,7 @@ namespace WindsmoonRP
             Setup(shadowSettings);
             DrawVisibleObjects(useDynamicBatching, useGPUInstancing, useLightsPerObject);
 
-            #if UNITY_EDITOR || DEBUG
+            #if UNITY_EDITOR
             DrawUnsupportedShaderObjects();
             DrawGizmos(true);
             // DrawGizmos(false);
@@ -77,7 +77,7 @@ namespace WindsmoonRP
                 postProcessingStack.Render(cameraFrameBufferPropertyID);
             }
             
-            #if UNITY_EDITOR || DEBUG
+            #if UNITY_EDITOR
             DrawGizmos(false);
             #endif
 
