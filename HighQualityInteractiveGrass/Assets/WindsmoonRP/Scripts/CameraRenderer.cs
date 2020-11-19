@@ -21,6 +21,7 @@ namespace WindsmoonRP
         private CullingResults cullingResults;
         private static ShaderTagId unlitShaderTagID = new ShaderTagId("SRPDefaultUnlit");
         private static ShaderTagId litShaderTagID = new ShaderTagId("WindsmoonLit");
+        private static ShaderTagId alwaysTagID = new ShaderTagId("Always");
         private static int cameraFrameBufferPropertyID = Shader.PropertyToID("_CameraFrameBuffer");
         private string commandBufferName;
         private Lighting lighting = new Lighting();
@@ -29,7 +30,7 @@ namespace WindsmoonRP
         #if UNITY_EDITOR || DEBUG
         private static ShaderTagId[] legacyShaderTagIDs = 
         {
-            new ShaderTagId("Always"),
+            // new ShaderTagId("Always"),
             new ShaderTagId("ForwardBase"),
             new ShaderTagId("PrepassBase"),
             new ShaderTagId("Vertex"),
@@ -144,6 +145,8 @@ namespace WindsmoonRP
                     perObjectData = PerObjectData.Lightmaps | PerObjectData.ShadowMask | PerObjectData.OcclusionProbe | PerObjectData.OcclusionProbeProxyVolume 
                                     | PerObjectData.LightProbe | PerObjectData.LightProbeProxyVolume | PerObjectData.ReflectionProbes | lightsPerObjectFlag};
             drawingSettings.SetShaderPassName(1, litShaderTagID);
+            // drawingSettings.SetShaderPassName(2, alwaysTagID);
+            
             FilteringSettings filteringSettings = new FilteringSettings(RenderQueueRange.opaque);
             renderContext.DrawRenderers(cullingResults, ref drawingSettings, ref filteringSettings);
             renderContext.DrawSkybox(camera);
