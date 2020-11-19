@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class GrassSea : MonoBehaviour
 {
@@ -17,9 +18,15 @@ public class GrassSea : MonoBehaviour
     [SerializeField, Range(0, 1)]
     private float stablility = 0;
     private Vector2 uvOffset = new Vector2(0, 0);
+    private Transform fireRoot;
+    private CommandBuffer commandBuffer;
     #endregion
 
     #region unity methods
+    private void Awake()
+    {
+        fireRoot = transform.Find("FireRoot");
+    }
 
     private void OnValidate()
     {
@@ -38,6 +45,12 @@ public class GrassSea : MonoBehaviour
         Shader.SetGlobalVector("_worldRect", new Vector4(worldRect.x, worldRect.y, worldRect.width, worldRect.height));
         Shader.SetGlobalVector("_uvOffset", uvOffset);
         Shader.SetGlobalFloat("_Stability", stablility);
+    }
+
+    private void RenderFire()
+    {
+        commandBuffer.BeginSample("Area");
+        commandBuffer.EndSample("Area");
     }
     #endregion
 }
