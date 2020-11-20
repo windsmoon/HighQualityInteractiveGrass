@@ -44,7 +44,8 @@ struct Varyings
     float4 positionCS : SV_Position;
     float3 positionWS : VAR_POSITION;
     float3 normalWS : VAR_NORMAL;
-	float4 color : VAR_COLOR;
+	float4 color : VAR_INTERACTIVE_COLOR;
+	float4 interactiveColor : VAR_COLOR;
 
 	#if defined(NORMAL_MAP)
 		float4 tangentWS : VAR_TANGENT;
@@ -70,7 +71,7 @@ Varyings LitVertex(Attribute input)
     output.positionWS = TransformObjectToWorld(input.positionOS);
 
 	#if defined(GRASS)
-		 HandleInteractiveGrass(output.positionWS, input.positionOS, input.color);
+		 HandleInteractiveGrass(output.positionWS, input.positionOS, input.color, output.interactiveColor);
 	#endif
 	
 	output.positionCS = TransformWorldToHClip(output.positionWS);
@@ -134,6 +135,12 @@ float4 LitFragment(Varyings input) : SV_Target
 	surface.dither = InterleavedGradientNoise(input.positionCS.xy, 0);
 	BRDF brdf = GetBRDF(surface);
 	GI gi = GetGI(GI_FRAGMENT_DATA(input), surface, brdf);
-	return float4(GetLighting(surface, brdf, gi) + GetEmission(config), surface.alpha);
+	float3 finalColor = GetLighting(surface, brdf, gi) + GetEmission(config);
+
+	#if defined(GRASS)
+		finalColor *= input.interactiveColor;
+	#endif
+
+	return float4(finalColor, surface.alpha);
 }
 #endif

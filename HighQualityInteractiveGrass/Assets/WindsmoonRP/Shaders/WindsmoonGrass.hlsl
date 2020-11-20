@@ -2,6 +2,7 @@
 #define WINDSMOON_GRASS_INCLUDED
 
 #define MAX_INTERACTIVE_OBJECT_COUNT 16
+#define MAX_Fire_OBJECT_COUNT 64
 // #define MAX_OTHER_LIGHT_COUNT 64
 
 // UNITY_INSTANCING_BUFFER_START(UnityPerMaterial1)
@@ -11,6 +12,8 @@
 CBUFFER_START(GrassInfo)
     int _InteracitveObjectsCount;
     float4 _InteractiveObjects[MAX_INTERACTIVE_OBJECT_COUNT];
+    int _FireCount;
+    float4 _FireObjects[MAX_Fire_OBJECT_COUNT];
     float4 _UniformWindEffect;
     float4 _worldRect;
     float4 _uvOffset;
@@ -22,7 +25,7 @@ float2 GetWindUV(float3 posWS)
     return float2((posWS.xz - _worldRect.xy) / _worldRect.zw);
 }
 
-void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
+void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor, out float4 interactiveColor)
 {
     float random01 = Random01(posWS.xz); // posWS is near ??
     float maxOffsetScale = GetMaxGrassOffsetScale();
@@ -97,6 +100,24 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor)
     // float scale = posOS.y / (sqrt(squareSlopeLenght) + 0.00001f);
     // offset.y = -(posOS.y - posOS.y * scale);
     // posWS += offset;
+
+
+    // fires
+    for (int i = 0; i < _FireCount; ++i)
+    {
+        float4 fireObjects = _FireObjects[i];
+        float2 distance = rootPosWS.xz - fireObjects.xz;
+
+        if (length(distance) < 1)
+        {
+            interactiveColor = 0;
+        }
+
+        else
+        {
+            interactiveColor = 0.01;
+        }
+    }
 }
 
 #endif
