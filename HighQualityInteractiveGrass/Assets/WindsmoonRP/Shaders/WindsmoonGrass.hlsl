@@ -88,7 +88,7 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor, out
         float3 interactiveOffset = posWS - interactiveObjectPosWS;
         // float3 interactiveDir = normalize(interactiveOffset);
         float squaredInteractiveXZLength = Square(interactiveOffset.x) + Square(interactiveOffset.z);
-        float squaredInteractiveXZLengthScale = clamp(squaredInteractiveXZLength / 0.8, 0, 1); // todo ： add object area
+        float squaredInteractiveXZLengthScale = clamp(squaredInteractiveXZLength / 0.8, 0, 0.6); // todo ： add object area
 
         float interactiveOffsetLength = lerp(maxInteracitveOffset * 0.5, 0, squaredInteractiveXZLengthScale);
         // interactiveOffset = lerp(maxInteracitveOffset * interactiveOffsetDirection.xz, float2(0, 0), squaredInteractiveXZLengthScale);
