@@ -27,11 +27,31 @@ float2 GetWindUV(float3 posWS)
 
 void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor, out float4 interactiveColor)
 {
+    float3 rootPosWS = TransformObjectToWorld(float3(0, 0, 0));
+
+    // fires
+    for (int i = 0; i < _FireCount; ++i)
+    {
+        float4 fireObjects = _FireObjects[i];
+        float2 distance = rootPosWS.xz - fireObjects.xz;
+
+        if (length(distance) < 1.5)
+        {
+            interactiveColor = float4(0.05f, 0, 0, 1);
+            break;
+        }
+
+        else
+        {
+            interactiveColor = 1;
+        }
+
+        // interactiveColor = rootPosWS.xyzz;
+    }
+    
     float random01 = Random01(posWS.xz); // posWS is near ??
     float maxOffsetScale = GetMaxGrassOffsetScale();
-    float3 rootPosWS = TransformObjectToWorld(float3(0, 0, 0));
     float originalLength = length(posWS - rootPosWS);
-
     float maxOffset = originalLength * maxOffsetScale; // todo : set grass height
 
     // caculate nosie uv and sample the noise
@@ -100,24 +120,6 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor, out
     // float scale = posOS.y / (sqrt(squareSlopeLenght) + 0.00001f);
     // offset.y = -(posOS.y - posOS.y * scale);
     // posWS += offset;
-
-
-    // fires
-    for (int i = 0; i < _FireCount; ++i)
-    {
-        float4 fireObjects = _FireObjects[i];
-        float2 distance = rootPosWS.xz - fireObjects.xz;
-
-        if (length(distance) < 1)
-        {
-            interactiveColor = 0;
-        }
-
-        else
-        {
-            interactiveColor = 0.01;
-        }
-    }
 }
 
 #endif

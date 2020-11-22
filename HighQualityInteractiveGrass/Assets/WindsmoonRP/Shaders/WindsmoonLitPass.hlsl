@@ -139,6 +139,7 @@ float4 LitFragment(Varyings input) : SV_Target
 
 	#if defined(GRASS)
 		finalColor *= input.interactiveColor;
+		// return input.interactiveColor;
 	#endif
 
 	return float4(finalColor, surface.alpha);

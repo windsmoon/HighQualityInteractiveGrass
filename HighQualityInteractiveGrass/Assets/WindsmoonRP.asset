@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WindsmoonRP
   m_EditorClassIdentifier: 
   allowHDR: 1
-  useDynamicBatching: 1
+  useDynamicBatching: 0
   useGPUInstancing: 1
   useSPRBatcher: 0
   useLightsPerObject: 1
@@ -32,5 +32,4 @@ MonoBehaviour:
     otherShadowSettings:
       ShadowMapSize: 1024
       PCFMode: 0
-  postProcessingAsset: {fileID: 11400000, guid: 2dc5410c16d0f5b4ebff063450422efb,
-    type: 2}
+  postProcessingAsset: {fileID: 0}
