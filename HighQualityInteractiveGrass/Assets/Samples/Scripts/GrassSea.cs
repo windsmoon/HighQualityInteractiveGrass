@@ -86,15 +86,16 @@ public class GrassSea : MonoBehaviour
     private void SetFirePosition()
     {
         // List<Transform> fireList = new List<Transform>();
-        Vector4[] positions = new Vector4[fireRoot.childCount];
-
-        for (int i = 0; i < fireRoot.childCount; ++i)
+        Vector4[] positions = new Vector4[64];
+        int fireCount = Mathf.Min(fireRoot.childCount, 64);
+        
+        for (int i = 0; i < fireCount; ++i)
         {
             // fireList.Add(fireRoot.GetChild(i));
             positions[i] = fireRoot.GetChild(i).transform.position;
         }
 
-        Shader.SetGlobalInt("_FireCount", fireRoot.childCount);
+        Shader.SetGlobalInt("_FireCount", fireCount);
         Shader.SetGlobalVectorArray("_FireObjects", positions);
     }
     #endregion

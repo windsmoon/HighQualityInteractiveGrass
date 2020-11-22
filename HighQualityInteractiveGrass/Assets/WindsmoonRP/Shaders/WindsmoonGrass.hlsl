@@ -35,7 +35,7 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor, out
         float4 fireObjects = _FireObjects[i];
         float2 distance = rootPosWS.xz - fireObjects.xz;
 
-        if (length(distance) < 1.5)
+        if (length(distance) < 1)
         {
             interactiveColor = float4(0.05f, 0, 0, 1);
             break;
