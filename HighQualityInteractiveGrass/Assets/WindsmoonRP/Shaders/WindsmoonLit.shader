@@ -70,7 +70,7 @@
             #pragma shader_feature _ MASK_MAP
             #pragma shader_feature _ DETAIL_MAP
             #pragma shader_feature _ LIGHTS_PER_OBJECT
-            #pragma shader_feature_instancing
+            #pragma multi_compile_instancing
             #pragma vertex LitVertex
             #pragma fragment LitFragment
 
