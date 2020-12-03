@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Rendering;
+using WindsmoonRP.GrassSea;
 using WindsmoonRP.PostProcessing;
 using WindsmoonRP.Shadow;
 
@@ -25,6 +26,7 @@ namespace WindsmoonRP
         private string commandBufferName;
         private Lighting lighting = new Lighting();
         private PostProcessingStack postProcessingStack = new PostProcessingStack();
+        private GrassSeaRenderer grassSeaRenderer = new GrassSeaRenderer();
 
         #if UNITY_EDITOR || DEBUG
         private static ShaderTagId[] legacyShaderTagIDs = 
@@ -42,7 +44,8 @@ namespace WindsmoonRP
         #endregion
         
         #region methods
-        public void Render(ScriptableRenderContext renderContext, Camera camera, bool allowHDR, bool useDynamicBatching, bool useGPUInstancing, bool useLightsPerObject, ShadowSettings shadowSettings, PostProcessingAsset postProcessingAsset)
+        public void Render(ScriptableRenderContext renderContext, Camera camera, bool allowHDR, bool useDynamicBatching, bool useGPUInstancing, bool useLightsPerObject, ShadowSettings shadowSettings, 
+            PostProcessingAsset postProcessingAsset, GrassSeaConfig grassSeaConfig)
         {
             this.renderContext = renderContext;
             this.camera = camera;
@@ -63,6 +66,13 @@ namespace WindsmoonRP
             lighting.Setup(renderContext, cullingResults, shadowSettings, useLightsPerObject);
             postProcessingStack.Setup(renderContext, camera, postProcessingAsset, useHDR);
             commandBuffer.EndSample(commandBufferName);
+            
+            // grass sea
+            if (grassSeaConfig)
+            {
+                grassSeaRenderer.Render(renderContext, grassSeaConfig);
+            }
+            
             Setup(shadowSettings);
             DrawVisibleObjects(useDynamicBatching, useGPUInstancing, useLightsPerObject);
 

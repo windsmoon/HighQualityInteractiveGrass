@@ -3,6 +3,7 @@ using UnityEngine.Rendering;
 using WindsmoonRP.Shadow;
 using Unity.Collections;
 using UnityEngine.Experimental.GlobalIllumination;
+using WindsmoonRP.GrassSea;
 using WindsmoonRP.PostProcessing;
 
 namespace WindsmoonRP
@@ -17,6 +18,7 @@ namespace WindsmoonRP
         private bool useLightsPerObject;
         private ShadowSettings shadowSettings;
         private PostProcessingAsset postProcessingAsset;
+        private GrassSeaConfig grassSeaConfig;
 
 #if UNITY_EDITOR
         private static Lightmapping.RequestLightsDelegate requestLightDelegate =
@@ -80,7 +82,8 @@ namespace WindsmoonRP
         #endregion
         
         #region constructors
-        public WindsmoonRenderPipeline(bool allowHDR, bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher, bool useLightsPerObject, ShadowSettings shadowSettings, PostProcessingAsset postProcessingAsset)
+        public WindsmoonRenderPipeline(bool allowHDR, bool useDynamicBatching, bool useGPUInstancing, bool useSRPBatcher, bool useLightsPerObject, ShadowSettings shadowSettings, 
+            PostProcessingAsset postProcessingAsset, GrassSeaConfig grassSeaConfig)
         {
             this.allowHDR = allowHDR;
             this.useDynamicBatching = useDynamicBatching;
@@ -91,6 +94,7 @@ namespace WindsmoonRP
             GraphicsSettings.lightsUseLinearIntensity = true;
             this.shadowSettings = shadowSettings;
             this.postProcessingAsset = postProcessingAsset;
+            this.grassSeaConfig = grassSeaConfig;
             
 #if UNITY_EDITOR
             Lightmapping.SetDelegate(requestLightDelegate);            
@@ -103,7 +107,7 @@ namespace WindsmoonRP
         {
             foreach (Camera camera in cameras)
             {
-                cameraRenderer.Render(renderContex, camera, allowHDR, useDynamicBatching, useGPUInstancing, useLightsPerObject, shadowSettings, postProcessingAsset);
+                cameraRenderer.Render(renderContex, camera, allowHDR, useDynamicBatching, useGPUInstancing, useLightsPerObject, shadowSettings, postProcessingAsset, grassSeaConfig);
             }
         }
 
