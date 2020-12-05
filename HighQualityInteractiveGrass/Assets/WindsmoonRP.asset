@@ -15,7 +15,7 @@ MonoBehaviour:
   allowHDR: 1
   useDynamicBatching: 0
   useGPUInstancing: 1
-  useSPRBatcher: 0
+  useSPRBatcher: 1
   useLightsPerObject: 1
   shadowSettings:
     maxDistance: 12
@@ -34,3 +34,4 @@ MonoBehaviour:
       PCFMode: 0
   postProcessingAsset: {fileID: 11400000, guid: 2dc5410c16d0f5b4ebff063450422efb,
     type: 2}
+  grassSeaConfig: {fileID: 11400000, guid: df2c390b45ac22a4988f3e358ca4ef91, type: 2}
