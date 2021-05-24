@@ -29,25 +29,28 @@ void HandleInteractiveGrass(inout float3 posWS, float3 posOS, float4 factor, out
 {
     float3 rootPosWS = TransformObjectToWorld(float3(0, 0, 0));
 
-    // fires
-    for (int i = 0; i < _FireCount; ++i)
-    {
-        float4 fireObjects = _FireObjects[i];
-        float2 distance = rootPosWS.xz - fireObjects.xz;
+    // // fires
+    // for (int i = 0; i < _FireCount; ++i)
+    // {
+    //     float4 fireObjects = _FireObjects[i];
+    //     float2 distance = rootPosWS.xz - fireObjects.xz;
+    //
+    //     if (length(distance) < 1)
+    //     {
+    //         interactiveColor = float4(0.05f, 0, 0, 1);
+    //         break;
+    //     }
+    //
+    //     else
+    //     {
+    //         interactiveColor = 1;
+    //     }
+    //
+    //     // interactiveColor = rootPosWS.xyzz;
+    // }
 
-        if (length(distance) < 1)
-        {
-            interactiveColor = float4(0.05f, 0, 0, 1);
-            break;
-        }
-
-        else
-        {
-            interactiveColor = 1;
-        }
-
-        // interactiveColor = rootPosWS.xyzz;
-    }
+    // todo
+    interactiveColor = 1;
     
     float random01 = Random01(posWS.xz); // posWS is near ??
     float maxOffsetScale = GetMaxGrassOffsetScale();
